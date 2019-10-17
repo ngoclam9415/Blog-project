@@ -1,5 +1,5 @@
 from __future__ import print_function
-from flask import request,render_template, Flask, send_from_directory, jsonify, Response
+from flask import request,render_template, Flask, send_from_directory, jsonify, Response, redirect
 from flask_cors import CORS, cross_origin
 import os
 
@@ -14,24 +14,26 @@ def index():
     return app.send_static_file('login/html/index.html')
     # return app.send_static_file('test/test.html')
 
-@app.route('/main')
+@app.route('/main', methods=["GET"])
 def show_main():
-    data = request.get_json()
-    if data['email'] == "lamnn@athena.studio" and data['pass'] == '1':
-        return app.send_static_file('blog/index.html')
-    else:
-        return Response("VALIDATE ERROR, INCORRECT PASSWORD OR EMAIL")
+    return redirect('/main_index', code=302)
+
+@app.route('/main_index')
+def drive():
+    return app.send_static_file('blog/index.html')
 
 @app.route('/<path:path>')
 def serve_page(path):
     return send_from_directory(path)
 
-@app.route('/login', methods=["POST"])
+@app.route('/login', methods=["GET"])
 def login():
-    data = request.get_json()
+    data = request.values
     user_id = data.get("email")
     print(dict(data))
-    return jsonify({"message" : "Hello {}".format(user_id)})
+    # return jsonify({"message" : "Hello {}".format(user_id)})
+    # return app.send_static_file("blog/index.html")
+    return redirect("/main", code=302)
 
 @app.route('/save_images', methods=["POST"])
 def save_images():

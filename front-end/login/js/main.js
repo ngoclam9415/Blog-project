@@ -21,12 +21,8 @@
     [ Validate ]*/
     var input = $('.validate-input .input100');
 
-    $('.validate-form').on('submit',function(event){
-        event.preventDefault();
+    $('.validate-form').on('submit',function(){
         var check = true;
-        var email = $("#email").val();
-        var pass = $("#email").val();
-        var data = {email : email, pass : pass};
 
         for(var i=0; i<input.length; i++) {
             if(validate(input[i]) == false){
@@ -34,10 +30,8 @@
                 check=false;
             }
         }
-        send_post_request("http://localhost:5000/main", data=data).then(response => {
-            var return_data = response;
-            console.log(return_data);
-        })
+        window.localStorage.setItem("email" , "lamnn@athena.studio")
+        window.localStorage.setItem("pass" , "1")
         return check;
     });
 
@@ -92,19 +86,5 @@
         
     });
 
-// SUBMIT ID AND PASSWORD
-
-async function send_post_request(url='', data={}){
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    });
-    console.log(data)
-    // return await response.json();
-    return await response.text();
-}
 
 // })(jQuery);
