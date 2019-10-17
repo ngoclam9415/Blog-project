@@ -35,8 +35,8 @@
             }
         }
         send_post_request("http://localhost:5000/main", data=data).then(response => {
-            var return_data = JSON.stringify(response);
-            console.log(JSON.stringify(return_data))
+            var return_data = response;
+            console.log(return_data);
         })
         return check;
     });
@@ -104,7 +104,7 @@ async function send_post_request(url='', data={}){
     });
     console.log(data)
     // return await response.json();
-    return await response;
+    return await response.text();
 }
 
 // })(jQuery);
