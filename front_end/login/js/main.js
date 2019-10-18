@@ -22,22 +22,29 @@
     var input = $('.validate-input .input100');
 
     $('.validate-form').on('submit',function(event){
-        event.preventDefault();
+        event.preventDefault()
         var check = true;
-        var email = $("#email").val();
-        var pass = $("#email").val();
-        var data = {email : email, pass : pass};
-
+        var data = {email: $("#email").val(), pass : $("#pass").val()}
         for(var i=0; i<input.length; i++) {
             if(validate(input[i]) == false){
                 showValidate(input[i]);
                 check=false;
             }
         }
+<<<<<<< HEAD:front-end/login/js/main.js
         send_post_request("http://localhost:5000/goto", data=data).then(response => {
             var return_data = response;
             console.log(return_data);
+=======
+
+        // this async function need .then to succesfully return value
+        send_post_request("http://localhost:5000/login", data).then(response => {
+            window.localStorage.setItem("hex_code", response.hex_code)
+            // Dont use JSON.stringify because it convert JSON object to string
+            
+>>>>>>> 9162671d418cc965b73978534ee488151d31bd64:front_end/login/js/main.js
         })
+        this.submit()
         return check;
     });
 
@@ -92,19 +99,16 @@
         
     });
 
-// SUBMIT ID AND PASSWORD
-
+// GET LOGIN CODE
 async function send_post_request(url='', data={}){
     const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
+        method : "POST",
+        headers : {
+            'Content-Type' : 'application/json'
         },
-        body: JSON.stringify(data)
+        body : JSON.stringify(data)
     });
-    console.log(data)
-    // return await response.json();
-    return await response.text();
+    return await response.json();
 }
 
 // })(jQuery);

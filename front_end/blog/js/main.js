@@ -1,9 +1,10 @@
-(function($) {
+
 
 	'use strict';
 
 	// bootstrap dropdown hover
 
+  verify()
   // loader
   var loader = function() {
     setTimeout(function() { 
@@ -177,5 +178,13 @@
 	contentWayPoint();
 
 
+function verify(){
+  var hex_code = window.localStorage.getItem("hex_code");
+  if (hex_code !== "0"){
+    add_newpost_button()
+  }
+}
 
-})(jQuery);
+function add_newpost_button(){
+  $('.col-9.social').append('<a href="blog/editor.html"><button type="button" id="new_post" class="btn btn-primary btn-lg">NEW POST</button></a>')
+}
