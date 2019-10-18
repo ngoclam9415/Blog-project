@@ -13,9 +13,17 @@ db = BlogDatabase()
 
 @app.route('/')
 def index():
-        return app.send_static_file('blog/about.html')
+        return app.send_static_file('blog/blog-single.html')
     
     # return app.send_static_file('test/test.html')
+
+@app.route('/blog/')
+@app.route('/blog/<string:slug>/')
+def postslug(slug):
+    if slug == "learn":
+        print("a")
+    else:
+        print("b")
 
 @app.route('/main', methods=["GET"])
 def show_main():
@@ -23,7 +31,7 @@ def show_main():
 
 @app.route('/main_index')
 def drive():
-    return app.send_static_file('blog/index.html')
+    return app.send_static_file('blog/blog-single.html')
 
 @app.route('/<path:path>')
 def serve_page(path):
@@ -91,6 +99,12 @@ def getallpost():
 def getlimitpost():
     data= request.get_json()
     posts = db.findlimit_post(data.get("timestart"),data.get("endtime"),data.get("postnumber"))
+    return posts
+
+@app.route('/getbyslug', methods=["POST"]) #{slug}
+def getbyslug():
+    data= request.get_json()
+    posts = db.findpostbyId(data.get("slug"))
     return posts
 
 #commentAPI

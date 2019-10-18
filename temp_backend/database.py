@@ -49,6 +49,10 @@ class BlogDatabase:
         cursors = self.post_collection.find({"ispublished": True, "isDeleted": False})
         return dumps(cursors)
 
+    def finpostbySlug(self,slug):
+        cursors = self.post_collection.find({"slug":slug})
+        return dumps(cursors)    
+
     def findlimit_post(self,startTime,endTime,limit):
         cursors = self.post_collection.find({"ispublished": True, "isDeleted": False, "postDate": {"$gte" : startTime, "$lte" : endTime}}).sort('time', -1).limit(limit)
         return dumps(cursors)
