@@ -11,9 +11,13 @@ print(STATIC_FOLDER)
 app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
 db = BlogDatabase()
 
-@app.route('/')
-def index():
-    return app.send_static_file('blog/index.html')
+@app.route('/<slug>')
+def index(slug):
+    if condition:
+        return app.send_static_file('blog/index.html')
+    else:
+        return app.send_static_file('blog/about.html')
+    
     # return app.send_static_file('test/test.html')
 
 @app.route('/main', methods=["GET"])
@@ -54,12 +58,6 @@ def gotoso():
 def uploadpost():
     data= request.get_json()
     result = db.insert_post(data.get("postTitle"),data.get("email"),data.get("thumbnail_IMG_URL"),data.get('slug'),data.get("postContent"),data.get("ispublish"))
-    return jsonify({"success": True})
-
-@app.route('/uploadpost', methods=["POST"]) #{postTitle,email,thumbnail_IMG_URL,slug,postContent}
-def uploadpost():
-    data= request.get_json()
-    result = db.insert_post(data.get("postTitle"),data.get("email"),data.get("thumbnail_IMG_URL"),data.get('slug'),data.get("postContent"))
     return jsonify({"success": True})
 
 @app.route('/updatepost', methods=["POST"]) #{postid,postTitle,email,thumbnail_IMG_URL,slug,postContent}
