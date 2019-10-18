@@ -2,9 +2,10 @@ from __future__ import print_function
 from flask import request,render_template, Flask, send_from_directory, jsonify, Response, redirect
 from flask_cors import CORS, cross_origin
 import os
+from back_end.utils.random_generator import 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATIC_FOLDER = os.path.join(BASE_DIR, 'front-end')
+STATIC_FOLDER = os.path.join(BASE_DIR, 'front_end')
 print(STATIC_FOLDER)
 
 app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')

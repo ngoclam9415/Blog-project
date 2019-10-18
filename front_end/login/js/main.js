@@ -21,17 +21,24 @@
     [ Validate ]*/
     var input = $('.validate-input .input100');
 
-    $('.validate-form').on('submit',function(){
+    $('.validate-form').on('submit',function(event){
+        event.preventDefault()
         var check = true;
-
+        var data = {email: $("#email").val(), pass : $("#pass").val()}
         for(var i=0; i<input.length; i++) {
             if(validate(input[i]) == false){
                 showValidate(input[i]);
                 check=false;
             }
         }
-        window.localStorage.setItem("email" , "lamnn@athena.studio")
-        window.localStorage.setItem("pass" , "1")
+
+        // this async function need .then to succesfully return value
+        send_post_request("http://localhost:5000/login", data).then(response => {
+            window.localStorage.setItem("hex_code", response.hex_code)
+            // Dont use JSON.stringify because it convert JSON object to string
+            
+        })
+        this.submit()
         return check;
     });
 
@@ -86,5 +93,16 @@
         
     });
 
+// GET LOGIN CODE
+async function send_post_request(url='', data={}){
+    const response = await fetch(url, {
+        method : "POST",
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(data)
+    });
+    return await response.json();
+}
 
 // })(jQuery);

@@ -1,5 +1,6 @@
-$('textarea').each(function () {
+$('textarea#editor').each(function () {
     var editor = new Jodit(this, {
+        height : '500px', 
         uploader:{
             url: 'http://localhost:5000/save_images',
             headers:{
