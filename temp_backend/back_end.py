@@ -13,7 +13,7 @@ db = BlogDatabase()
 
 @app.route('/')
 def index():
-    return app.send_static_file('login/html/index.html')
+    return app.send_static_file('blog/index.html')
     # return app.send_static_file('test/test.html')
 
 @app.route('/main', methods=["GET"])
@@ -50,6 +50,12 @@ def gotoso():
     return redirect(url_for('main'))
 
 #PostAPI
+@app.route('/makepostdraft', methods=["POST"]) #{postTitle,email,thumbnail_IMG_URL,slug,postContent,ispublish}
+def uploadpost():
+    data= request.get_json()
+    result = db.insert_post(data.get("postTitle"),data.get("email"),data.get("thumbnail_IMG_URL"),data.get('slug'),data.get("postContent"),data.get("ispublish"))
+    return jsonify({"success": True})
+
 @app.route('/uploadpost', methods=["POST"]) #{postTitle,email,thumbnail_IMG_URL,slug,postContent}
 def uploadpost():
     data= request.get_json()

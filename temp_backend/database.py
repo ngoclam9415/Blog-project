@@ -31,9 +31,9 @@ class BlogDatabase:
         return result
 
     #PostCollection
-    def insert_post(self, postTitle,email,thumbnail_IMG_URL,slug,postContent):
+    def uploadpost(self, postTitle,email,thumbnail_IMG_URL,slug,postContent,ispublished):
         curtime = time.time()
-        post = {"postTitle":postTitle, "postDate": curtime, "email":email, "thumbnail_IMG_URL" : thumbnail_IMG_URL, "slug": slug, "postContent": postContent, "ispublished": True,"isDeleted": False}
+        post = {"postTitle":postTitle, "postDate": curtime, "email":email, "thumbnail_IMG_URL" : thumbnail_IMG_URL, "slug": slug, "postContent": postContent, "ispublished": ispublished,"isDeleted": False}
         result = self.post_collection.insert_one(post)
         print(result)
         return result
