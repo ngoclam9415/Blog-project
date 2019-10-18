@@ -11,11 +11,8 @@ print(STATIC_FOLDER)
 app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
 db = BlogDatabase()
 
-@app.route('/<slug>')
-def index(slug):
-    if condition:
-        return app.send_static_file('blog/index.html')
-    else:
+@app.route('/')
+def index():
         return app.send_static_file('blog/about.html')
     
     # return app.send_static_file('test/test.html')
