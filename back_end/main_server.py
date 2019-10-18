@@ -1,6 +1,7 @@
 from __future__ import print_function
 from flask import request,render_template, Flask, send_from_directory, jsonify, Response, redirect
 import os
+import time
 from back_end.utils.random_generator import generate_random_hexcode
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,11 +31,19 @@ def login():
         
 @app.route('/save_images', methods=["POST"])
 def save_images():
-    data = request.files
-    data["files[0]"].save(os.path.join(STATIC_FOLDER, 'static', 'kitty.jpg'))
-    print('aaaaaaaaaa : ',dict(data))
+    images = request.files.getlist("images")
+    hex_code = request.form.get("hex_code")
+    return_paths = []
+    for image in images:
+        print(image.filename)
+        relative_path = os.path.join('static', 'kitty.jpg')
+        path = os.path.join(STATIC_FOLDER, relative_path)
+        image.save(path)
+        return_paths.append(relative_path)
+
+    print('aaaaaaaaaa : ',images)
     
-    return jsonify({'baseurl' : 'http://localhost:5000', "messages" : "success", "error" : 0, "files": ['static/kitty.jpg'], 'isImages' : [True]})
+    return jsonify({'baseurl' : 'http://localhost:5000', "messages" : "success", "error" : 0, "paths": return_paths})
 
 
 if __name__ == '__main__':

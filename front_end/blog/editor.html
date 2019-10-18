@@ -68,9 +68,25 @@
       <!-- END header -->
 
     <section class="site-section py-lg">
+        <div class="container">
+                <div class="form-group">
+                    <label for="exampleFormControlFile1">Example file input</label>
+                    <input type="file" class="form-control-file" id="title_file">
+                </div>
+        </div>
+        <div class="container">
+            <input class="form-control form-control-lg" type="text" placeholder="Input Title">
+            <br>
+        </div>
       <div class="container">
         <textarea id="editor" name="editor"></textarea>
-        <script src="js/test.js"></script>
+        <script src="js/editor.js"></script>
+        <br>
+      </div>
+      <div class="container">
+        <button type="button" id="post-btn" class="btn btn-primary">Post</button>
+        <button type="button" id="draft-btn" class="btn btn-secondary">Draft</button>
+        <button type="button" id="preview-btn" class="btn btn-success">Preview</button>
       </div>
     </section>
 
