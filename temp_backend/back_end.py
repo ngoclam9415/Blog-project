@@ -1,18 +1,15 @@
 from __future__ import print_function
-<<<<<<< HEAD
 from flask import request,render_template, Flask, send_from_directory, jsonify, Response, redirect, url_for
-=======
-from flask import request,render_template, Flask, send_from_directory, jsonify, Response, redirect
->>>>>>> 9162671d418cc965b73978534ee488151d31bd64
 from flask_cors import CORS, cross_origin
 import os
-from back_end.utils.random_generator import 
+from database import BlogDatabase
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_FOLDER = os.path.join(BASE_DIR, 'front_end')
 print(STATIC_FOLDER)
 
 app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
+db = BlogDatabase()
 
 @app.route('/')
 def index():
@@ -21,20 +18,11 @@ def index():
 
 @app.route('/main', methods=["GET"])
 def show_main():
-<<<<<<< HEAD
-    # data = request.get_json()
-    # if data['email'] == "lamnn@athena.studio" and data['pass'] == '1':
-    #     return app.send_static_file('blog/index.html')
-    # else:
-    #     return Response("VALIDATE ERROR, INCORRECT PASSWORD OR EMAIL")
-    render_template()
-=======
     return redirect('/main_index', code=302)
 
 @app.route('/main_index')
 def drive():
     return app.send_static_file('blog/index.html')
->>>>>>> 9162671d418cc965b73978534ee488151d31bd64
 
 @app.route('/<path:path>')
 def serve_page(path):
@@ -42,17 +30,13 @@ def serve_page(path):
 
 @app.route('/login', methods=["GET"])
 def login():
-<<<<<<< HEAD
     data = request.get_json()
     data = {'email' : asas, 'pass' : 1}
-=======
-    data = request.values
->>>>>>> 9162671d418cc965b73978534ee488151d31bd64
     user_id = data.get("email")
     print(dict(data))
-    # return jsonify({"message" : "Hello {}".format(user_id)})
-    # return app.send_static_file("blog/index.html")
-    return redirect("/main", code=302)
+    return jsonify({"message" : "Hello {}".format(user_id)})
+    return app.send_static_file("blog/index.html")
+
 
 @app.route('/save_images', methods=["POST"])
 def save_images():
@@ -65,7 +49,67 @@ def save_images():
 def gotoso():
     return redirect(url_for('main'))
 
+#PostAPI
+@app.route('/uploadpost', methods=["POST"]) #{postTitle,email,thumbnail_IMG_URL,slug,postContent}
+def uploadpost():
+    data= request.get_json()
+    result = db.insert_post(data.get("postTitle"),data.get("email"),data.get("thumbnail_IMG_URL"),data.get('slug'),data.get("postContent"))
+    return jsonify({"success": True})
 
+@app.route('/updatepost', methods=["POST"]) #{postid,postTitle,email,thumbnail_IMG_URL,slug,postContent}
+def updatepost():
+    data= request.get_json()
+    db.update_post(data.get("postid"),data.get("postTitle"),data.get("email"),data.get("thumbnail_IMG_URL"),data.get('slug'),data.get("postContent"))
+    return jsonify({"success": True})
+
+
+@app.route('/delepost', methods=["POST"]) #{postid}
+def delepost():
+    data= request.get_json()
+    result = db.delete_post(data.get("postid"))
+    return jsonify({"success": True})
+
+@app.route('/unpublishedpost', methods=["POST"]) #{postid}
+def unpublishedpost():
+    data= request.get_json()
+    result = db.unpublish_post(data.get("postid"))
+    return jsonify({"success": True})
+
+@app.route('/publishpost', methods=["POST"]) #{postid}
+def publishpost():
+    data= request.get_json()
+    result = db.publish_post(data.get("postid"))
+    return jsonify({"success": True})
+
+@app.route('/getallpost', methods=["GET"]) #{}
+def getallpost():
+    posts = db.findall_post()
+    return posts
+
+@app.route('/getlimitpost', methods=["POST"]) #{timestart, endtime, postnumber}
+def getlimitpost():
+    data= request.get_json()
+    posts = db.findlimit_post(data.get("timestart"),data.get("endtime"),data.get("postnumber"))
+    return posts
+
+#commentAPI
+@app.route('/getlimitcomment', methods=["POST"]) #{postid,timestart, endtime, commentnumber}
+def getlimitcomment():
+    data= request.get_json()
+    posts = db.getcommentofpost(data.get("postid"),data.get("timestart"),data.get("endtime"),data.get("commentnumber"))
+    return posts
+
+@app.route('/uploadcomment', methods=["POST"]) #{postid,commenterName,commenterEmail,CommentText}
+def uploadcomment():
+    data= request.get_json()
+    result = db.insert_comment(data.get("postid"),data.get("commenterName"),data.get("commenterEmail"),data.get('CommentText'))
+    return jsonify({"success": True})
+
+@app.route('/deletecomment', methods=["POST"]) #{commentid}
+def deletecomment():
+    data= request.get_json()
+    result = db.delete_comment(data.get("commentid"))
+    return jsonify({"success": True})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5000', debug=True)
