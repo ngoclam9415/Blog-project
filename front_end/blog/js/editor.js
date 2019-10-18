@@ -88,8 +88,18 @@ function get_html_output(){
 }
 
 function post_blog(){
-
+    var data = {""}
 }
 
-async function send_log_request(url, data, )
+async function send_log_request(url, data, ispublish){
+    data.ispublish = ispublish;
+    const response = await fetch(url, {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(data)
+    });
+    return await response.json();
+}
 
