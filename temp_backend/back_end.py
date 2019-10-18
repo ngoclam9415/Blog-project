@@ -51,7 +51,7 @@ def gotoso():
     return redirect(url_for('main'))
 
 #PostAPI
-@app.route('/makepostdraft', methods=["POST"]) #{postTitle,email,thumbnail_IMG_URL,slug,postContent,ispublish}
+@app.route('/uploadpost', methods=["POST"]) #{postTitle,email,thumbnail_IMG_URL,slug,postContent,ispublish}
 def uploadpost():
     data= request.get_json()
     result = db.insert_post(data.get("postTitle"),data.get("email"),data.get("thumbnail_IMG_URL"),data.get('slug'),data.get("postContent"),data.get("ispublish"))
