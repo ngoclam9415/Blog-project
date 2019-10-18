@@ -31,12 +31,18 @@
                 check=false;
             }
         }
+<<<<<<< HEAD:front-end/login/js/main.js
+        send_post_request("http://localhost:5000/goto", data=data).then(response => {
+            var return_data = response;
+            console.log(return_data);
+=======
 
         // this async function need .then to succesfully return value
         send_post_request("http://localhost:5000/login", data).then(response => {
             window.localStorage.setItem("hex_code", response.hex_code)
             // Dont use JSON.stringify because it convert JSON object to string
             
+>>>>>>> 9162671d418cc965b73978534ee488151d31bd64:front_end/login/js/main.js
         })
         this.submit()
         return check;
