@@ -102,7 +102,7 @@ def getlimitpost():
     return posts
 
 @app.route('/getbyslug', methods=["POST"]) #{slug}
-def getlimitpost():
+def getbyslug():
     data= request.get_json()
     posts = db.findpostbyId(data.get("slug"))
     return posts
