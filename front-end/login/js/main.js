@@ -34,7 +34,7 @@
                 check=false;
             }
         }
-        send_post_request("http://localhost:5000/main", data=data).then(response => {
+        send_post_request("http://localhost:5000/goto", data=data).then(response => {
             var return_data = response;
             console.log(return_data);
         })

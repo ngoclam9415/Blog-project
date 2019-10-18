@@ -1,5 +1,5 @@
 from __future__ import print_function
-from flask import request,render_template, Flask, send_from_directory, jsonify, Response
+from flask import request,render_template, Flask, send_from_directory, jsonify, Response, redirect, url_for
 from flask_cors import CORS, cross_origin
 import os
 
@@ -16,11 +16,12 @@ def index():
 
 @app.route('/main')
 def show_main():
-    data = request.get_json()
-    if data['email'] == "lamnn@athena.studio" and data['pass'] == '1':
-        return app.send_static_file('blog/index.html')
-    else:
-        return Response("VALIDATE ERROR, INCORRECT PASSWORD OR EMAIL")
+    # data = request.get_json()
+    # if data['email'] == "lamnn@athena.studio" and data['pass'] == '1':
+    #     return app.send_static_file('blog/index.html')
+    # else:
+    #     return Response("VALIDATE ERROR, INCORRECT PASSWORD OR EMAIL")
+    render_template()
 
 @app.route('/<path:path>')
 def serve_page(path):
@@ -29,6 +30,7 @@ def serve_page(path):
 @app.route('/login', methods=["POST"])
 def login():
     data = request.get_json()
+    data = {'email' : asas, 'pass' : 1}
     user_id = data.get("email")
     print(dict(data))
     return jsonify({"message" : "Hello {}".format(user_id)})
@@ -38,8 +40,13 @@ def save_images():
     data = request.files
     data["files[0]"].save(os.path.join(STATIC_FOLDER, 'static', 'kitty.jpg'))
     print('aaaaaaaaaa : ',dict(data))
-    
     return jsonify({"success" : True, "data" : dict(Response({"Hello" : "Lam"}).headers)})
+
+@app.route('/goto')
+def gotoso():
+    return redirect(url_for('main'))
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5000', debug=True)
