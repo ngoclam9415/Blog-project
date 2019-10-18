@@ -91,5 +91,5 @@ function post_blog(){
 
 }
 
-async function send_log_request()
+async function send_log_request(url, data, )
 
