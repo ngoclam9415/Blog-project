@@ -180,7 +180,8 @@
 
 function verify(){
   var hex_code = window.localStorage.getItem("hex_code");
-  if (hex_code !== "0"){
+  if (hex_code !== "0" && hex_code !== undefined && hex_code !== null){
+    
     add_newpost_button()
   }
 }

@@ -1,5 +1,6 @@
 var upload_file = [];
 var upload_images_url = "http://localhost:5000/save_images"
+var upload_post_url = "http://localhost:5000/uploadpost"
 
 class FileUploader{
     constructor(){
@@ -88,10 +89,32 @@ function get_html_output(){
 }
 
 function post_blog(){
-    var data = {""}
+    var title = $('#title_text').val();
+    var data = {
+        postTitle : title, 
+        email : window.localStorage.getItem("email"),
+        thumbnail_IMG_URL : fileUploader.title_img,
+        slug : window.location.origin() + '/posts/' + slugify(title),
+        postContent : get_html_output(),
+    }
+    send_blog_request(upload_post_url, data, ispublish=true)
 }
 
-async function send_log_request(url, data, ispublish){
+function draft_blog(){
+    var title = $('#title_text').val();
+    var data = {
+        postTitle : title, 
+        email : window.localStorage.getItem("email"),
+        thumbnail_IMG_URL : fileUploader.title_img,
+        slug : window.location.origin() + '/posts/' + slugify(title),
+        postContent : get_html_output(),
+    }
+    send_blog_request(upload_post_url, data, ispublish=false)
+}
+
+
+
+async function send_blog_request(url, data, ispublish){
     data.ispublish = ispublish;
     const response = await fetch(url, {
         method : 'POST',
@@ -103,3 +126,19 @@ async function send_log_request(url, data, ispublish){
     return await response.json();
 }
 
+function slugify(string) {
+  const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;'
+  const b = 'aaaaaaaaaacccddeeeeeeeegghiiiiiilmnnnnooooooooprrsssssttuuuuuuuuuwxyyzzz------'
+  const p = new RegExp(a.split('').join('|'), 'g')
+
+  return string.toString().toLowerCase()
+    .replace(/\s+/g, '-') // Replace spaces with -
+    .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
+    .replace(/&/g, '-and-') // Replace & with 'and'
+    .replace(/[^\w\-]+/g, '') // Remove all non-word characters
+    .replace(/\-\-+/g, '-') // Replace multiple - with single -
+    .replace(/^-+/, '') // Trim - from start of text
+    .replace(/-+$/, '') // Trim - from end of text
+}
+
+$("post-btn")
