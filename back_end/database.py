@@ -6,7 +6,8 @@ from bson.json_util import dumps
 
 class BlogDatabase:
     def __init__(self):
-        self.cluster = MongoClient("mongodb+srv://dat:mothai34@cluster0-4qfvw.mongodb.net/test?retryWrites=true&w=majority")
+        # self.cluster = MongoClient("mongodb+srv://dat:mothai34@cluster0-4qfvw.mongodb.net/test?retryWrites=true&w=majority")
+        self.cluster = MongoClient("localhost", 27017)
         self.db = self.cluster["blogDb"]
         self.user_collection = self.db["usertb"]
         self.post_collection = self.db["posttb"]
@@ -37,6 +38,12 @@ class BlogDatabase:
         result = self.post_collection.insert_one(post)
         print(result)
         return result
+
+    #Find post by slug
+    def findpost(self, slug_url):
+        cursor = self.post_collection.find_one({"slug" : slug_url})
+        return dict(cursor)
+
 
     def update_post(self,postid, postTitle,email,thumbnail_IMG_URL,slug,postContent):
         curtime = time.time()
@@ -75,9 +82,9 @@ class BlogDatabase:
 
 
     #CommentColection
-    def insert_comment(self,postid,commenterName,commenterEmail,CommentText):
+    def insert_comment(self,slug,commenterName,commenterEmail,CommentText):
         curtime = time.time()
-        comment = {"postid":postid,"commenterName":commenterName, "commenterEmail": commenterEmail, "commentDate":curtime, "CommentText" : CommentText}
+        comment = {"slug":slug,"commenterName":commenterName, "commenterEmail": commenterEmail, "commentDate":curtime, "CommentText" : CommentText}
         result = self.comment_collection.insert_one(comment)
         print(result)
         return result
@@ -87,11 +94,13 @@ class BlogDatabase:
         print(result)
         return result
 
-    def getcommentofpost(self,postid,timestart,endtime,commentnumber):
-        data=[]
-        cursors = self.comment_collection.find({"postid": postid, "commentDate": {"$gte" : timestart, "$lte" : endtime}}).sort('commentDate', -1).limit(commentnumber)
+    def getcommentofpost(self,slug,timestart,endtime,commentnumber):
+        data = []
+        cursors = self.comment_collection.find({"slug": slug, "commentDate": {"$gte" : timestart, "$lte" : endtime}}).sort('commentDate', -1).limit(commentnumber)
         return dumps(cursors)
 
-# if __name__ == '__main__':
-#     BDB = BlogDatabase()
-#     BDB.findall_post()
+if __name__ == '__main__':
+    import time
+    BDB = BlogDatabase()
+    data = BDB.getcommentofpost("hom-nay-troi-dep-qua", 0, time.time(), 6)
+    print(data)

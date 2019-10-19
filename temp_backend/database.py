@@ -38,6 +38,9 @@ class BlogDatabase:
         print(result)
         return result
 
+    #LoadPost
+    def 
+
     def update_post(self,postid, postTitle,email,thumbnail_IMG_URL,slug,postContent):
         curtime = time.time()
         querry= {"_id": ObjectId(postid)}

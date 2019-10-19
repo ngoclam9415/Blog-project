@@ -1,6 +1,6 @@
 var upload_file = [];
-var upload_images_url = "http://localhost:5000/save_images"
-var upload_post_url = "http://localhost:5000/uploadpost"
+var upload_images_url = window.location.origin +  "/save_images";
+var upload_post_url = window.location.origin + "/uploadpost";
 
 class FileUploader{
     constructor(){
@@ -71,6 +71,7 @@ $(document).ready(function(){
         upload_file.push(fileName)
         alert('The file "' + fileName.name +  '" has been selected.');
     });
+    $("#post-btn").on("click", post_blog);
 });
 // add_input_file_button()
 
@@ -94,10 +95,12 @@ function post_blog(){
         postTitle : title, 
         email : window.localStorage.getItem("email"),
         thumbnail_IMG_URL : fileUploader.title_img,
-        slug : window.location.origin() + '/posts/' + slugify(title),
+        slug : slugify(title),
         postContent : get_html_output(),
     }
-    send_blog_request(upload_post_url, data, ispublish=true)
+    send_blog_request(upload_post_url, data, ispublish=true).then(response => {
+        console.log(response);
+    })
 }
 
 function draft_blog(){
@@ -106,10 +109,12 @@ function draft_blog(){
         postTitle : title, 
         email : window.localStorage.getItem("email"),
         thumbnail_IMG_URL : fileUploader.title_img,
-        slug : window.location.origin() + '/posts/' + slugify(title),
+        slug : slugify(title),
         postContent : get_html_output(),
     }
-    send_blog_request(upload_post_url, data, ispublish=false)
+    send_blog_request(upload_post_url, data, ispublish=false).then(response => {
+        console.log(response);
+    })
 }
 
 
@@ -141,4 +146,6 @@ function slugify(string) {
     .replace(/-+$/, '') // Trim - from end of text
 }
 
-$("post-btn")
+
+
+

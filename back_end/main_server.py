@@ -4,13 +4,15 @@ import os
 import time
 from back_end.utils.random_generator import generate_random_hexcode
 from database import BlogDatabase
+from datetime import date
+import json
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_FOLDER = os.path.join(BASE_DIR, 'back_end', 'templates')
 hex_code = generate_random_hexcode()
 app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
-bd = BlogDatabase()
+db = BlogDatabase()
 
 @app.route('/')
 def index():
@@ -35,7 +37,7 @@ def login():
 @app.route('/uploadpost', methods=["POST"]) #{postTitle,email,thumbnail_IMG_URL,slug,postContent,ispublish}
 def uploadpost():
     data= request.get_json()
-    result = db.insert_post(data.get("postTitle"),data.get("email"),data.get("thumbnail_IMG_URL"),data.get('slug'),data.get("postContent"),data.get("ispublish"))
+    result = db.uploadpost(data.get("postTitle"),data.get("email"),data.get("thumbnail_IMG_URL"),data.get('slug'),data.get("postContent"),data.get("ispublish"))
     print(data)
     return jsonify({"success": True})
 
@@ -57,8 +59,42 @@ def save_images():
 
 @app.route('/blog/<slug>')
 def show_post(slug):
+    print(slug)
+    if ".html" not in slug:
+        data = db.findpost(slug)
+        comments = db.getcommentofpost(slug, 0, time.time(), 0)
+        comments = json.loads(comments)
+        for comment in comments:
+            print(comment)
+            print(type(comment))
+            comment["commentDate"] = date.fromtimestamp(comment["commentDate"]).strftime("%B %d, %Y AT %I:%M%p")
+            # print(comm)
+        return render_template("blog/blog-slug.html", text_title=data["postTitle"], content=data['postContent'], cover_image=data['thumbnail_IMG_URL'], comments_len=len(comments), comments=comments)
+    else:
+        return app.send_static_file("blog/contact.html")
 
-    return render_template("blog/blog-slug.html", text_title="HEHE Sorry man", content='<h1>HELLO WORD</h1>')
+@app.route('/get_latest_posts', methods=["POST"])
+def get_some_posts():
+    cursors = db.findlimit_post(0, time.time(), 20)
+    print(cursors)
+    return jsonify(cursors)
+
+@app.route('/editor')
+def show_editor():
+    return render_template("blog/editor.html")
+
+@app.route('/uploadcomment', methods=["POST"]) #{slug,commenterName,commenterEmail,CommentText}
+def uploadcomment():
+    data= request.get_json()
+    result = db.insert_comment(data.get("slug"),data.get("commenterName"),data.get("commenterEmail"),data.get('CommentText'))
+    return jsonify({"success": True})
+
+@app.route('/getlimitcomment', methods=["POST"]) #{postid,timestart, endtime, commentnumber}
+def getlimitcomment():
+    data= request.get_json()
+    posts = db.getcommentofpost(data.get("slug"),data.get("starttime"),data.get("endtime"),data.get("commentnumber"))
+    print(posts)
+    return jsonify(posts)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5000", debug=True)

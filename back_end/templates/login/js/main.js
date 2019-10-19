@@ -24,7 +24,8 @@
     $('.validate-form').on('submit',function(event){
         event.preventDefault()
         var check = true;
-        var data = {email: $("#email").val(), pass : $("#pass").val()}
+        var email = $("#email").val();
+        var data = {email: email, pass : $("#pass").val()}
         for(var i=0; i<input.length; i++) {
             if(validate(input[i]) == false){
                 showValidate(input[i]);
@@ -35,6 +36,7 @@
         // this async function need .then to succesfully return value
         send_post_request("http://localhost:5000/login", data).then(response => {
             window.localStorage.setItem("hex_code", response.hex_code)
+            window.localStorage.setItem("email", email)
             // Dont use JSON.stringify because it convert JSON object to string
             
         })
