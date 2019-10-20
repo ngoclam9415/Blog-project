@@ -7,7 +7,7 @@ from bson.json_util import dumps
 class BlogDatabase:
     def __init__(self):
         # self.cluster = MongoClient("mongodb+srv://dat:mothai34@cluster0-4qfvw.mongodb.net/test?retryWrites=true&w=majority")
-        self.cluster = MongoClient("localhost", 27017)
+        self.cluster = MongoClient("localhost", 27017, )
         self.db = self.cluster["blogDb"]
         self.user_collection = self.db["usertb"]
         self.post_collection = self.db["posttb"]
