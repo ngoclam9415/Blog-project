@@ -21,8 +21,40 @@ resources:
 
 handlers:
 
+- url: /blog/js
+  static_dir : /templates/blog/js
+
+- url: /blog/css
+  static_dir : /templates/blog/css
+
+- url: /blog/scss
+  static_dir : /templates/blog/scss
+
+- url: /blog/fonts
+  static_dir : /templates/blog/fonts
+
+- url: /blog/images
+  static_dir : /templates/blog/images
+
+- url: /login/js
+  static_dir : /templates/login/js
+
+- url: /login/css
+  static_dir : /templates/login/css
+
+- url: /login/vendor
+  static_dir : /templates/login/vendor
+
+- url: /login/fonts
+  static_dir : /templates/login/fonts
+
+- url: /login/html
+  static_dir : /templates/login/html
+
+- url: /static
+  static_dir : /templates/static
+
 - url: /
-  static_dir: /templates
   script: main.app
 
 - url: /.*
