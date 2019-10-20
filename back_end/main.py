@@ -11,16 +11,17 @@ import json
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_FOLDER = os.path.join(BASE_DIR, 'back_end', 'templates')
 hex_code = generate_random_hexcode()
-app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
+# app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
+app = Flask(__name__)
 db = BlogDatabase()
 
 @app.route('/')
 def index():
-    return app.send_static_file('blog/index.html')
+    return render_template('blog/index.html')
 
 @app.route('/secret_ingredient')
 def login_page():
-    return app.send_static_file('login/html/index.html')
+    return render_template('login/html/index.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -71,7 +72,7 @@ def show_post(slug):
             # print(comm)
         return render_template("blog/blog-slug.html", text_title=data["postTitle"], content=data['postContent'], cover_image=data['thumbnail_IMG_URL'], comments_len=len(comments), comments=comments)
     else:
-        return app.send_static_file("blog/contact.html")
+        return render_template("blog/contact.html")
 
 @app.route('/get_latest_posts', methods=["POST"])
 def get_some_posts():
