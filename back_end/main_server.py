@@ -2,7 +2,7 @@ from __future__ import print_function
 from flask import request,render_template, Flask, send_from_directory, jsonify, Response, redirect
 import os
 import time
-from back_end.utils.random_generator import generate_random_hexcode
+from utils.random_generator import generate_random_hexcode
 from database import BlogDatabase
 from datetime import date
 import json
