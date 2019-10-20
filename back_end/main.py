@@ -49,8 +49,8 @@ def save_images():
     return_paths = []
     for image in images:
         print(image.filename)
-        filename = int(round(time.time() * 1000))
-        relative_path = os.path.join('static', '{}.jpg'.format(filename))
+        filename = '{}.jpg'.format(int(round(time.time() * 1000)))
+        relative_path = os.path.join('static', filename)
         path = os.path.join(STATIC_FOLDER, filename)
         image.save(path)
         return_paths.append(relative_path)
