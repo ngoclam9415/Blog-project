@@ -5,9 +5,9 @@ entrypoint: gunicorn -b :$PORT main:app
 runtime_config:
   python_version: 3
 
-# libraries:
-# - name: jinja2
-#   version: latest
+libraries:
+- name: jinja2
+  version: latest
 # This sample incurs costs to run on the App Engine flexible environment. 
 # The settings below are to reduce costs during testing and are not appropriate
 # for production use. For more information, see:
@@ -20,11 +20,7 @@ resources:
   disk_size_gb: 10
 
 handlers:
-
-- url: /
-  script: main.app
-
-- url: /.*
+- url: .*
   script: main.app
 
 - url: /static
