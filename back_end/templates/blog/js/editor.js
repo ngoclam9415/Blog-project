@@ -100,6 +100,7 @@ function post_blog(){
     }
     send_blog_request(upload_post_url, data, ispublish=true).then(response => {
         console.log(response);
+        window.location.href = window.location.origin + "/blog/" + data.slug;
     })
 }
 
@@ -114,7 +115,7 @@ function draft_blog(){
     }
     send_blog_request(upload_post_url, data, ispublish=false).then(response => {
         console.log(response);
-        window.location.href = window.location.origin + "/" + data.slug;
+        window.location.href = window.location.origin + "/blog/" + data.slug;
     })
 }
 
