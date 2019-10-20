@@ -101,6 +101,7 @@ function post_blog(){
     send_blog_request(upload_post_url, data, ispublish=true).then(response => {
         console.log(response);
         window.location.href = window.location.origin + "/blog/" + data.slug;
+        // console.log(window.location.origin + "/blog/" + data.slug);
     })
 }
 
