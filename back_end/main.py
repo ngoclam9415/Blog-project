@@ -9,7 +9,7 @@ import json
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATIC_FOLDER = os.path.join(BASE_DIR, 'back_end', 'templates')
+STATIC_FOLDER = os.path.join(BASE_DIR, 'back_end', 'static')
 hex_code = generate_random_hexcode()
 # app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
 app = Flask(__name__)
@@ -49,8 +49,9 @@ def save_images():
     return_paths = []
     for image in images:
         print(image.filename)
-        relative_path = os.path.join('static', '{}.jpg'.format(int(round(time.time() * 1000))))
-        path = os.path.join(STATIC_FOLDER, relative_path)
+        filename = int(round(time.time() * 1000))
+        relative_path = os.path.join('static', '{}.jpg'.format(filename))
+        path = os.path.join(STATIC_FOLDER, filename)
         image.save(path)
         return_paths.append(relative_path)
 
