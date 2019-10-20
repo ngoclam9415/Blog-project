@@ -53,8 +53,8 @@ handlers:
 - url: /static
   static_dir : templates
 
-- url: /
-  script: main.app
+# - url: /
+#   script: main.app
 
 - url: /.*
   script: main.app
