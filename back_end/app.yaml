@@ -21,7 +21,7 @@ resources:
 
 handlers:
 - url: .*
-script: main.app
+  script: main.app
 
--url: /static
-static_dir: /templates/static
+- url: /static
+  static_dir: /templates/static
