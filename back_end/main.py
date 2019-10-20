@@ -9,10 +9,10 @@ import json
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-STATIC_FOLDER = os.path.join(BASE_DIR, 'back_end', 'templates')
+STATIC_FOLDER = os.path.join(BASE_DIR, 'back_end', 'static')
 hex_code = generate_random_hexcode()
-# app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
-app = Flask(__name__)
+app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='/static')
+# app = Flask(__name__)
 db = BlogDatabase()
 
 @app.route('/')
