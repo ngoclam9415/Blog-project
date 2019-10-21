@@ -16,7 +16,7 @@ hex_code = generate_random_hexcode()
 # app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
 app = Flask(__name__)
 db = BlogDatabase()
-# BSC = BucketStorageClient()
+BSC = BucketStorageClient()
 
 @app.route('/')
 def index():
