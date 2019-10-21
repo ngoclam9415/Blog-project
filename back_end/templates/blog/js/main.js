@@ -249,11 +249,11 @@ function insert_latest_post(data){
 }
 
 function insert_owl_item(data){
-  var new_data = '<div>  <a href="blog/blog-single.html" class="a-block d-flex align-items-center height-lg" style="background-image: url(\'blog/images/img_1.jpg\'); ">    <div class="text half-to-full">      <span class="category mb-5">Food</span>      <div class="post-meta">                <span class="author mr-2"><img src="blog/images/person_1.jpg" alt="Colorlib"> Colorlib</span>&bullet;        <span class="mr-2">March 15, 2018 </span> &bullet;        <span class="ml-2"><span class="fa fa-comments"></span> 3</span>              </div>      <h3>How to Find the Video Games of Your Youth</h3>    </div>  </a></div>'
+  var new_data = '<div>  <a href="blog/blog-single.html" class="a-block d-flex align-items-center height-lg" style="background-image: url(\'blog/images/img_1.jpg\'); ">    <div class="text half-to-full">      <span class="category mb-5">Food</span>      <div class="post-meta">                <span class="author mr-2"><img src="http://fresherseason2-teamtwo.appspot.com/static/blog/images/person_1.jpg" alt="Colorlib"> Colorlib</span>&bullet;        <span class="mr-2">March 15, 2018 </span> &bullet;        <span class="ml-2"><span class="fa fa-comments"></span> 3</span>              </div>      <h3>How to Find the Video Games of Your Youth</h3>    </div>  </a></div>'
   
   var time = new Date(data.postDate*1000);
   new_data = new_data.replace("blog/blog-single.html", window.location.origin+ '/blog/' +data.slug);
-  new_data = new_data.replace("blog/images/img_1.jpg", "https://fresherseason2-teamtwo.appspot.com" + '/' + data.thumbnail_IMG_URL);
+  new_data = new_data.replace("blog/images/img_1.jpg", data.thumbnail_IMG_URL);
   new_data = new_data.replace("How to Find the Video Games of Your Youth", data.postTitle);
   new_data = new_data.replace("> Colorlib<", ">" + window.localStorage.getItem("email") + "<");
   new_data = new_data.replace("March 15, 2018", time.toDateString())
@@ -266,7 +266,7 @@ function insert_popular_posts(data){
   var new_data = '<li>  <a href="blog/">    <img src="blog/images/img_2.jpg" alt="Image placeholder" class="mr-4">    <div class="text">      <h4>How to Find the Video Games of Your Youth</h4>      <div class="post-meta">        <span class="mr-2">March 15, 2018 </span>      </div>    </div>  </a></li>'
   new_data = new_data.replace("blog/", window.location.origin+ '/blog/' +data.slug);
   new_data = new_data.replace("March 15, 2018", time.toDateString())
-  new_data = new_data.replace('blog/images/img_2.jpg', "https://fresherseason2-teamtwo.appspot.com" + "/" + data.thumbnail_IMG_URL);
+  new_data = new_data.replace('blog/images/img_2.jpg', data.thumbnail_IMG_URL);
   new_data = new_data.replace("How to Find the Video Games of Your Youth", data.postTitle)
   $("#popular_post").find("ul").prepend(new_data);
 }
