@@ -19,6 +19,9 @@ resources:
   memory_gb: 0.5
   disk_size_gb: 10
 
+env_variables:
+    CLOUD_STORAGE_BUCKET: blog_images_storage
+
 handlers:
 - url: /static
   static_dir: static

@@ -2,7 +2,7 @@ from __future__ import print_function
 from flask import request,render_template, Flask, send_from_directory, jsonify, Response, redirect
 import os
 import time
-from utils.random_generator import generate_random_hexcode
+from utils.random_generator import generate_random_hexcode, bucket_uploader
 from database import BlogDatabase
 from datetime import date
 import json
@@ -15,6 +15,7 @@ hex_code = generate_random_hexcode()
 # app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
 app = Flask(__name__)
 db = BlogDatabase()
+BSC = bucket_uploader.BucketStorageClient()
 
 @app.route('/')
 def index():
@@ -50,12 +51,8 @@ def save_images():
     hex_code = request.form.get("hex_code")
     return_paths = []
     for image in images:
-        print(image.filename)
-        filename = '{}.jpg'.format(int(round(time.time() * 1000)))
-        relative_path = os.path.join('static', filename)
-        path = os.path.join(STATIC_FOLDER, filename)
-        image.save(path)
-        return_paths.append(relative_path)
+        url = BSC.save_images(image)
+        return_paths.append(url)
 
     print('aaaaaaaaaa : ',images)
     
