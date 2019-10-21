@@ -2,7 +2,8 @@ from __future__ import print_function
 from flask import request,render_template, Flask, send_from_directory, jsonify, Response, redirect
 import os
 import time
-from utils.random_generator import generate_random_hexcode, bucket_uploader
+from utils.random_generator import generate_random_hexcode
+from utils.bucket_uploader import BucketStorageClient
 from database import BlogDatabase
 from datetime import date
 import json
@@ -15,7 +16,7 @@ hex_code = generate_random_hexcode()
 # app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
 app = Flask(__name__)
 db = BlogDatabase()
-BSC = bucket_uploader.BucketStorageClient()
+BSC = BucketStorageClient()
 
 @app.route('/')
 def index():
