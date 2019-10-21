@@ -11,7 +11,7 @@ class FileUploader{
     upload_tiltle_images(url, files){
         this.request_upload_images(url, files).then(response => {
             console.log(response)
-            var title_url = window.location.origin + '/' + response.paths[0]
+            var title_url =  response.paths[0]
             if (this.title_img === undefined){
                 $(".site-section.py-lg").prepend('<div class="container>"><img src="'+ title_url +'" class="img-thumbnail rounded mx-auto d-block" style="width: 50%; height: 50%;" alt="Responsive image"></div>')
             } else{
@@ -24,7 +24,7 @@ class FileUploader{
     upload_content_images(url, files){
         this.request_upload_images(url, files).then(response => {
             console.log(response);
-            var title_url = window.location.origin + '/' + response.paths[0];
+            var title_url =  response.paths[0];
             $(".jodit_wysiwyg").append('<img src="'+ title_url +'" class="img-thumbnail" style="width: 25%; height: auto;" alt="Responsive image">')
         })
     }
