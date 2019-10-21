@@ -6,6 +6,7 @@ from utils.random_generator import generate_random_hexcode
 from database import BlogDatabase
 from datetime import date
 import json
+import logging
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,6 +46,7 @@ def uploadpost():
 @app.route('/save_images', methods=["POST"])
 def save_images():
     images = request.files.getlist("images")
+    logging.warning(images)
     hex_code = request.form.get("hex_code")
     return_paths = []
     for image in images:
