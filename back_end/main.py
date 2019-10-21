@@ -52,7 +52,7 @@ def save_images():
     hex_code = request.form.get("hex_code")
     return_paths = []
     for image in images:
-        url = BSC.save_images(image)
+        url = BSC.upload_file(image)
         return_paths.append(url)
 
     print('aaaaaaaaaa : ',images)
