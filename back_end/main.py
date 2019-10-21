@@ -87,9 +87,11 @@ def show_editor():
 
 @app.route('/uploadcomment', methods=["POST"]) #{slug,commenterName,commenterEmail,CommentText}
 def uploadcomment():
-    data= request.get_json()
-    result = db.insert_comment(data.get("slug"),data.get("commenterName"),data.get("commenterEmail"),data.get('CommentText'))
-    return jsonify({"success": True})
+    data = request.get_json()
+    curtime = time.time()
+    result, comment = db.insert_comment(data.get("slug"),data.get("commenterName"),data.get("commenterEmail"),data.get('CommentText'), curtime)
+    comment["success"] = True
+    return jsonify(comment)
 
 @app.route('/getlimitcomment', methods=["POST"]) #{postid,timestart, endtime, commentnumber}
 def getlimitcomment():
