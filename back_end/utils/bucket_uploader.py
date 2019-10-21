@@ -12,10 +12,10 @@ class BucketStorageClient:
         self.bucket = self.gcs.get_bucket(CLOUD_STORAGE_BUCKET)
 
     def upload_file(self, file):
-        blob = self.bucket.blob(file.filename)
-        blob.make_public()
+        blob = self.bucket.blob("images/" + file.filename)
         blob.upload_from_string(
             file.read(),
             content_type=file.content_type
         )
+        blob.make_public()
         return blob.public_url
