@@ -17,7 +17,7 @@ resources:
   disk_size_gb: 10
 
 env_variables:
-    CLOUD_STORAGE_BUCKET: blog_images_storage
+    CLOUD_STORAGE_BUCKET: fresherseason2-teamtwo.appspot.com
 
 handlers:
 - url: /static
