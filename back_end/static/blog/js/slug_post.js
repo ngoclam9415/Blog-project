@@ -1,9 +1,10 @@
 var upload_comment_url = window.location.origin + "/uploadcomment"
 
-$("#postcomment").on("click",post_comment)
+$(".p-5.bg-light").on("submit",post_comment)
 
 
-function post_comment(){
+function post_comment(event){
+  event.preventDefault()
   var url_list = window.location.href.split("/");
   var slug = url_list[url_list.length - 1];
   var data = {

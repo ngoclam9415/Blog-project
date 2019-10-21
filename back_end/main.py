@@ -16,7 +16,7 @@ hex_code = generate_random_hexcode()
 # app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
 app = Flask(__name__)
 db = BlogDatabase()
-BSC = BucketStorageClient()
+# BSC = BucketStorageClient()
 
 @app.route('/')
 def index():
@@ -90,7 +90,12 @@ def uploadcomment():
     data = request.get_json()
     curtime = time.time()
     result, comment = db.insert_comment(data.get("slug"),data.get("commenterName"),data.get("commenterEmail"),data.get('CommentText'), curtime)
-    comment["success"] = True
+    print(comment)
+    comment = dict(comment)
+    comment.setdefault("sucess", True)
+    del comment["_id"]
+    print(type(comment))
+    print(comment)
     return jsonify(comment)
 
 @app.route('/getlimitcomment', methods=["POST"]) #{postid,timestart, endtime, commentnumber}
