@@ -1,6 +1,6 @@
 var upload_comment_url = window.location.origin + "/uploadcomment"
 
-$("#postcomment").on("click", )
+$("#postcomment").on("click",post_comment)
 
 
 function post_comment(){
