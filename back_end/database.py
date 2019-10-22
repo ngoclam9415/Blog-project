@@ -12,7 +12,7 @@ class BlogDatabase:
         self.user_collection = self.db["usertb"]
         self.post_collection = self.db["posttb"]
         self.comment_collection = self.db["commenttb"]
-    #Usercollection
+    
     def insert_user(self, username,userpassword):
 	    curtime = time.time()
 	    user = {"username": username, "userpassword":userpassword, "createdate" : curtime, "role": 1, "active": True}
@@ -85,7 +85,6 @@ class BlogDatabase:
     def insert_comment(self,slug,commenterName,commenterEmail,CommentText, curtime):
         comment = {"slug":slug,"commenterName":commenterName, "commenterEmail": commenterEmail, "commentDate":curtime, "CommentText" : CommentText}
         result = self.comment_collection.insert_one(comment)
-        print(result)
         return result, comment
 
     def delete_comment(self,comentid):
