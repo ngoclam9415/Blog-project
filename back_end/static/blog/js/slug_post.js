@@ -63,7 +63,23 @@ function render_comment(data){
   render_item = render_item.replace('{{comments[i]["CommentText"]}}', data.CommentText);
   console.log(render_item, data.CommentText)
   
-  var number_of_comments = $("#nof_comments").val();
-  $("#nof_comments").val(parseInt(number_of_comments) + 1);
+  // var number_of_comments = $("#nof_comments").val();
+  // $("#nof_comments").val(parseInt(number_of_comments) + 1);
+  // $(".comment-list").prepend(render_item);
+  increase_comment_number(render_item)
+}
+
+function increase_comment_number(render_item){
+  var number_of_comments = $("#nof_comments").text()[0];
+  $("#nof_comments").text((parseInt(number_of_comments) + 1) + " Comments");
   $(".comment-list").prepend(render_item);
+}
+
+function erase_form_input(){
+  $("#name").val("");
+  $("#email").val("");
+  $("#message").val("");
+  $([document.documentElement, document.body]).animate({
+    scrollTop: $("#nof_comments").offset().top
+  }, 2000);
 }
