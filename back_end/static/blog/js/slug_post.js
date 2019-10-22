@@ -50,7 +50,7 @@ async function send_post_comment(url, data){
 }
 
 function render_comment(data){
-  var render_item = '<li class="comment">  <div class="vcard">    <img src="https://fresherseason2-teamtwo.appspot.com/static/blog/images/person_1.jpg" alt="Image placeholder">  </div>  <div class="comment-body">    <h3>{{comments[i]["commenterName"]}}</h3>    <div class="meta">{{comments[i]["commentDate"]}}</div>    <p>{{comments[i]["CommentText"]}}</p>  </div></li>';
+  var render_item = '<li class="comment">  <div class="vcard">    <img src="'+ window.location.origin + '/static/blog/images/person_1.jpg" alt="Image placeholder">  </div>  <div class="comment-body">    <h3>{{comments[i]["commenterName"]}}</h3>    <div class="meta">{{comments[i]["commentDate"]}}</div>    <p>{{comments[i]["CommentText"]}}</p>  </div></li>';
   var time = new Date(data.commentDate*1000);
   var hours = time.getHours();
   var ampm = hours >= 12 ? 'PM' : 'AM';
