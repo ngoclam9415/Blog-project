@@ -19,6 +19,12 @@ db = BlogDatabase()
 # BSC = BucketStorageClient()
 BSC = LocalStorageClient(STATIC_FOLDER)
 
+category_collection = {"ai-ml" : "AI/ML",
+                        "front-end" : "Front-end",
+                        "back-end" : "Back-end",
+                        "system" : "System",
+                        "data" : "Data"}
+
 @app.route('/')
 def index():
     return render_template('blog/index.html')
@@ -75,13 +81,13 @@ def show_post(slug):
             print(type(comment))
             comment["commentDate"] = date.fromtimestamp(comment["commentDate"]).strftime("%B %d, %Y AT %I:%M%p")
             # print(comm)
-        return render_template("blog/blog-slug.html", text_title=data["postTitle"], content=data['postContent'], cover_image=data['thumbnail_IMG_URL'], comments_len=len(comments), comments=comments)
+        return render_template("blog/blog-slug.html", text_title=data["postTitle"], content=data['postContent'], cover_image=data['thumbnail_IMG_URL'], comments_len=len(comments), comments=comments, tags=data["tags"])
     else:
         return render_template("blog/contact.html")
 
 @app.route('/get_latest_posts', methods=["POST"])
 def get_some_posts():
-    cursors = db.findlimit_post(0, time.time(), 20)
+    cursors = db.findlimit_post(0, time.time(), 10, 1)
     # print(cursors)
     return jsonify(cursors)
 
@@ -111,7 +117,9 @@ def getlimitcomment():
 
 @app.route('/category/<category_name>')
 def show_category_page(category_name):
-    return render_template("/blog/category.html")
+    if category_name not in category_collection.keys():
+        return "INVALID URL"
+    return render_template("/blog/category.html", )
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5000", debug=True)

@@ -34,7 +34,7 @@ class BlogDatabase:
     #PostCollection
     def uploadpost(self, postTitle,email,thumbnail_IMG_URL,slug,postContent,ispublished, tags):
         curtime = time.time()
-        post = {"postTitle":postTitle, "postDate": curtime, "email":email, "thumbnail_IMG_URL" : thumbnail_IMG_URL, "slug": slug, "postContent": postContent, "ispublished": ispublished,"isDeleted": False}
+        post = {"postTitle":postTitle, "postDate": curtime, "email":email, "thumbnail_IMG_URL" : thumbnail_IMG_URL, "slug": slug, "postContent": postContent, "ispublished": ispublished,"isDeleted": False, "tags" : tags}
         result = self.post_collection.insert_one(post)
         for tag in tags:
             self.insert_to_tag_collection(tag, str(result.inserted_id), post["slug"], curtime, thumbnail_IMG_URL, postTitle, email)
@@ -64,8 +64,15 @@ class BlogDatabase:
         cursors = self.post_collection.find({"ispublished": True, "isDeleted": False})
         return dumps(cursors)
 
-    def findlimit_post(self,startTime,endTime,limit):
-        cursors = self.post_collection.find({"ispublished": True, "isDeleted": False, "postDate": {"$gte" : startTime, "$lte" : endTime}}).sort('time', -1).limit(limit)
+    def findlimit_post(self,startTime,endTime,limit, skipped_item=1):
+        print(self.post_collection.count() - skipped_item*limit)
+        nof_documents = self.post_collection.count()
+        if nof_documents < skipped_item*limit:
+            skip = (skipped_item-1)*limit
+        else:
+            skip = nof_documents - skipped_item*limit
+        print(skip)
+        cursors = self.post_collection.find({"ispublished": True, "isDeleted": False, "postDate": {"$gte" : startTime, "$lte" : endTime}}).sort('time', -1).skip(skip).limit(limit)
         return dumps(cursors)
 
     def findpostbyId(self,postid):
@@ -112,6 +119,10 @@ class BlogDatabase:
                     "thumbnail_IMG_URL" : thumbnail_IMG_URL, 
                     "postTitle" : postTitle,
                     "email" : email})
+
+    def query_posts_by_tag(self, tag, startTime, endTime, limit= 10, skipped_item=0):
+        cursors = self.db["tag"].find({"ispublished": True, "isDeleted": False, "postDate": {"$gte" : startTime, "$lte" : endTime}}).sort('time', -1).skip(self.db["tag"].count() - skipped_item*limit).limit(limit)
+        return dumps(cursors)
 
         
 
