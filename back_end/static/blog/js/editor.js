@@ -81,7 +81,7 @@ function add_input_file_button(){
 
 function insert_file_button(){
     // $('<li class="jodit_toolbar_btn jodit_toolbar_btn-separator"></li>').insertAfter('.jodit_toolbar_btn-redo');
-    $('<li class="jodit_toolbar_btn"><a id="upload" style="background-color: rgba(255,0,0,0.2);;" onclick="document.getElementById(\'file_input\').click();"><i class="fa fa-upload"></i><input type="file" id="file_input" class="form-control-file" accept="image/png, image/jpeg" hidden=""></a></li>').insertAfter('.jodit_toolbar_btn-redo');
+    $('<li class="jodit_toolbar_btn"><a id="upload" style="background-color: rgba(255,0,0,0.2);;" onclick="document.getElementById(\'file_input\').click();"><i class="fa fa-upload"></i><input type="file" id="file_input" class="form-control-file" accept="image/*" hidden=""></a></li>').insertAfter('.jodit_toolbar_btn-redo');
 
 }
 
@@ -91,12 +91,20 @@ function get_html_output(){
 
 function post_blog(){
     var title = $('#title_text').val();
+    var tags = [];
+    var choices = $(".select2-selection__rendered").find(".select2-selection__choice") 
+    if (choices.length > 0){
+        for (i = 0; i < choices.length; i++){
+            tags.push(choices.eq(i).attr("title"))
+        }
+    }
     var data = {
         postTitle : title, 
         email : window.localStorage.getItem("email"),
         thumbnail_IMG_URL : fileUploader.title_img,
         slug : slugify(title),
         postContent : get_html_output(),
+        tags : tags,
     }
     send_blog_request(upload_post_url, data, ispublish=true).then(response => {
         console.log(response);

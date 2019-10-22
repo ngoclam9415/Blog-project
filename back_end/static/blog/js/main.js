@@ -4,8 +4,8 @@
 
   // bootstrap dropdown hover
   
-  var get_latest_post_url = window.location.origin + "/get_latest_posts"
-
+  var get_latest_post_url = window.location.origin + "/get_latest_posts";
+  var post_person_image = window.location.origin + '/static/blog/images/person_1.jpg';
   
   verify()
   // loader
@@ -237,7 +237,7 @@ function insert_latest_post(data){
   var new_data = '<div class="col-md-6"><a href=' + window.location.origin+ '/blog/' +data.slug + ' class="blog-entry element-animate fadeIn element-animated" data-animate-effect="fadeIn" style="background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBt8z5qtrx1xSI80zhZ2h1Ba8xg_D06avqRJwNq49hlGXGGu7D"); ">' + '<img src=' + data.thumbnail_IMG_URL +' style="width : 30vw; height : 50vh" alt="Not \n Available">' + 
         '<div class="blog-content-body">' + 
           '<div class="post-meta">' + 
-            '<span class="author mr-2"><img src="http://fresherseason2-teamtwo.appspot.com/static/blog/images/person_1.jpg" alt="Colorlib"> Colorlib</span>' +
+            '<span class="author mr-2"><img src="' + post_person_image + '" alt="Colorlib"> Colorlib</span>' +
             '<span class="mr-2">'+ time.toDateString() +' </span> ' + 
             '<span class="ml-2"><span class="fa fa-comments"></span> 3</span>' + 
           '</div>' + 
@@ -249,7 +249,7 @@ function insert_latest_post(data){
 }
 
 function insert_owl_item(data){
-  var new_data = '<div>  <a href="blog/blog-single.html" class="a-block d-flex align-items-center height-lg" style="background-image: url(\'blog/images/img_1.jpg\'); ">    <div class="text half-to-full">      <span class="category mb-5">Food</span>      <div class="post-meta">                <span class="author mr-2"><img src="http://fresherseason2-teamtwo.appspot.com/static/blog/images/person_1.jpg" alt="Colorlib"> Colorlib</span>&bullet;        <span class="mr-2">March 15, 2018 </span> &bullet;        <span class="ml-2"><span class="fa fa-comments"></span> 3</span>              </div>      <h3>How to Find the Video Games of Your Youth</h3>    </div>  </a></div>'
+  var new_data = '<div>  <a href="blog/blog-single.html" class="a-block d-flex align-items-center height-lg" style="background-image: url(\'blog/images/img_1.jpg\'); ">    <div class="text half-to-full">      <span class="category mb-5">Food</span>      <div class="post-meta">                <span class="author mr-2"><img src="' + post_person_image + '" alt="Colorlib"> Colorlib</span>&bullet;        <span class="mr-2">March 15, 2018 </span> &bullet;        <span class="ml-2"><span class="fa fa-comments"></span> 3</span>              </div>      <h3>How to Find the Video Games of Your Youth</h3>    </div>  </a></div>'
   
   var time = new Date(data.postDate*1000);
   new_data = new_data.replace("blog/blog-single.html", window.location.origin+ '/blog/' +data.slug);
@@ -263,7 +263,7 @@ function insert_owl_item(data){
 
 function insert_popular_posts(data){
   var time = new Date(data.postDate*1000);
-  var new_data = '<li>  <a href="blog/">    <img src="blog/images/img_2.jpg" alt="Image placeholder" class="mr-4">    <div class="text">      <h4>How to Find the Video Games of Your Youth</h4>      <div class="post-meta">        <span class="mr-2">March 15, 2018 </span>      </div>    </div>  </a></li>'
+  var new_data = '<li>  <a href="blog/">    <img src="blog/images/img_2.jpg" alt="Image placeholder" class="mr-4">    <div class="text">      <h4>How to Find the Video Games of Your Youth</h4>          </div>  </a><div class="post-meta">        <span class="mr-2">March 15, 2018 </span>      </div></li>'
   new_data = new_data.replace("blog/", window.location.origin+ '/blog/' +data.slug);
   new_data = new_data.replace("March 15, 2018", time.toDateString())
   new_data = new_data.replace('blog/images/img_2.jpg', data.thumbnail_IMG_URL);

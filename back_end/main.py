@@ -3,7 +3,7 @@ from flask import request,render_template, Flask, send_from_directory, jsonify, 
 import os
 import time
 from utils.random_generator import generate_random_hexcode
-from utils.bucket_uploader import BucketStorageClient
+from utils.bucket_uploader import BucketStorageClient, LocalStorageClient
 from database import BlogDatabase
 from datetime import date
 import json
@@ -16,7 +16,8 @@ hex_code = generate_random_hexcode()
 # app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
 app = Flask(__name__)
 db = BlogDatabase()
-BSC = BucketStorageClient()
+# BSC = BucketStorageClient()
+BSC = LocalStorageClient(STATIC_FOLDER)
 
 @app.route('/')
 def index():
@@ -41,8 +42,9 @@ def login():
 @app.route('/uploadpost', methods=["POST"]) #{postTitle,email,thumbnail_IMG_URL,slug,postContent,ispublish}
 def uploadpost():
     data= request.get_json()
-    result = db.uploadpost(data.get("postTitle"),data.get("email"),data.get("thumbnail_IMG_URL"),data.get('slug'),data.get("postContent"),data.get("ispublish"))
+    result = db.uploadpost(data.get("postTitle"),data.get("email"),data.get("thumbnail_IMG_URL"),data.get('slug'),data.get("postContent"),data.get("ispublish"), data.get("tags"))
     print(data)
+    print(result)
     return jsonify({"success": True})
 
 @app.route('/save_images', methods=["POST"])
@@ -64,6 +66,8 @@ def show_post(slug):
     print(slug)
     if ".html" not in slug:
         data = db.findpost(slug)
+        if data is None:
+            return "Page is not avaiable"
         comments = db.getcommentofpost(slug, 0, time.time(), 0)
         comments = json.loads(comments)
         for comment in comments:
@@ -78,7 +82,7 @@ def show_post(slug):
 @app.route('/get_latest_posts', methods=["POST"])
 def get_some_posts():
     cursors = db.findlimit_post(0, time.time(), 20)
-    print(cursors)
+    # print(cursors)
     return jsonify(cursors)
 
 @app.route('/editor')
@@ -104,6 +108,10 @@ def getlimitcomment():
     posts = db.getcommentofpost(data.get("slug"),data.get("starttime"),data.get("endtime"),data.get("commentnumber"))
     print(posts)
     return jsonify(posts)
+
+@app.route('/category/<category_name>')
+def show_category_page(category_name):
+    return render_template("/blog/category.html")
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5000", debug=True)

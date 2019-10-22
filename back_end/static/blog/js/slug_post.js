@@ -16,26 +16,27 @@ $(".p-5.bg-light").submit(function(event){
   send_post_comment(upload_comment_url, data).then(response => {
     console.log(response);
     render_comment(response);
+    erase_form_input()
   })
 })
 
 
-function post_comment(event){
-  event.preventDefault()
-  var url_list = window.location.href.split("/");
-  var slug = url_list[url_list.length - 1];
-  var data = {
-    slug : slug,
-    commenterName : $("#name").val(),
-    commenterEmail : $("#email").val(),
-    CommentText : $("#message").val(),
-  };
-  console.log(data)
-  send_post_comment(upload_comment_url, data).then(response => {
-    console.log(response)
-    render_comment(response)
-  })
-}
+// function post_comment(event){
+//   event.preventDefault()
+//   var url_list = window.location.href.split("/");
+//   var slug = url_list[url_list.length - 1];
+//   var data = {
+//     slug : slug,
+//     commenterName : $("#name").val(),
+//     commenterEmail : $("#email").val(),
+//     CommentText : $("#message").val(),
+//   };
+//   console.log(data)
+//   send_post_comment(upload_comment_url, data).then(response => {
+//     console.log(response)
+//     render_comment(response)
+//   })
+// }
 
 async function send_post_comment(url, data){
   const response = await fetch(url, {
@@ -76,10 +77,10 @@ function increase_comment_number(render_item){
 }
 
 function erase_form_input(){
-  $("#name").val("");
-  $("#email").val("");
+  // $("#name").val("");
+  // $("#email").val("");
   $("#message").val("");
   $([document.documentElement, document.body]).animate({
     scrollTop: $("#nof_comments").offset().top
-  }, 2000);
+  }, 500);
 }
