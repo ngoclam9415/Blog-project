@@ -119,7 +119,14 @@ def getlimitcomment():
 def show_category_page(category_name):
     if category_name not in category_collection.keys():
         return "INVALID URL"
-    return render_template("/blog/category.html", )
+    category_posts = db.query_posts_by_tag(category_collection[category_name], 0, time.time(), 10, 1)
+    category_posts = json.loads(category_posts)
+    # print(category_posts)
+    # print(type(category_posts))
+    # print(len(category_posts))
+    return render_template("/blog/category.html",
+                     category_name=category_collection[category_name], 
+                     category_posts = category_posts)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5000", debug=True)

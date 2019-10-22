@@ -37,7 +37,7 @@ class BlogDatabase:
         post = {"postTitle":postTitle, "postDate": curtime, "email":email, "thumbnail_IMG_URL" : thumbnail_IMG_URL, "slug": slug, "postContent": postContent, "ispublished": ispublished,"isDeleted": False, "tags" : tags}
         result = self.post_collection.insert_one(post)
         for tag in tags:
-            self.insert_to_tag_collection(tag, str(result.inserted_id), post["slug"], curtime, thumbnail_IMG_URL, postTitle, email)
+            self.insert_to_tag_collection(tag, str(result.inserted_id), post["slug"], curtime, thumbnail_IMG_URL, postTitle, email, ispublished)
         return result
 
     #Find post by slug
@@ -112,16 +112,24 @@ class BlogDatabase:
         cursors = self.comment_collection.find({"slug": slug, "commentDate": {"$gte" : timestart, "$lte" : endtime}}).sort('commentDate', -1).limit(commentnumber)
         return dumps(cursors)
 
-    def insert_to_tag_collection(self, tag, id, slug, curtime,thumbnail_IMG_URL, postTitle, email):
+    def insert_to_tag_collection(self, tag, id, slug, curtime,thumbnail_IMG_URL, postTitle, email, ispublished):
         object_id = ObjectId(id)
         self.db[tag].insert_one({"_id" : object_id, 
                     "slug" : slug, "postDate" : curtime, 
                     "thumbnail_IMG_URL" : thumbnail_IMG_URL, 
                     "postTitle" : postTitle,
-                    "email" : email})
+                    "email" : email,
+                    "ispublished" : ispublished,
+                    "isDeleted" : False})
 
-    def query_posts_by_tag(self, tag, startTime, endTime, limit= 10, skipped_item=0):
-        cursors = self.db["tag"].find({"ispublished": True, "isDeleted": False, "postDate": {"$gte" : startTime, "$lte" : endTime}}).sort('time', -1).skip(self.db["tag"].count() - skipped_item*limit).limit(limit)
+    def query_posts_by_tag(self, tag, startTime, endTime, limit= 10, skipped_item=1):
+        nof_documents = self.db[tag].count()
+        print(tag)
+        if nof_documents < skipped_item*limit:
+            skip = (skipped_item-1)*limit
+        else:
+            skip = nof_documents - skipped_item*limit
+        cursors = self.db[tag].find({"ispublished": True, "isDeleted": False, "postDate": {"$gte" : startTime, "$lte" : endTime}}).sort('time', -1).skip(skip).limit(limit)
         return dumps(cursors)
 
         
@@ -129,5 +137,5 @@ class BlogDatabase:
 if __name__ == '__main__':
     import time
     BDB = BlogDatabase()
-    data = BDB.getcommentofpost("hom-nay-troi-dep-qua", 0, time.time(), 6)
+    data = BDB.query_posts_by_tag("AI/ML", 0, time.time(), 6, 1)
     print(data)
