@@ -117,14 +117,14 @@
               <div class="col-md-12">
                 {% for category_post in category_posts %}
                   <div class="post-entry-horzontal">
-                    <a href="http://localhost:5000/blog/{{ category_post['slug']}}" style="width : 100%">
+                    <a href="http://localhost:5000/blog/{{ category_post['slug']}}" style="width : 100%; border: 1px solid #e6e6e6;">
                       <div class="image element-animate" data-animate-effect="fadeIn" style="background-image: url({{ category_post['thumbnail_IMG_URL']}});"></div>
-                      <span class="text">
+                      <span class="text" style="border:0px">
                         <div class="post-meta">
                           <span class="author mr-2"><img src="http://localhost:5000/static/blog/images/person_1.jpg" alt="Colorlib">{{ category_post["email"] }}</span>&bullet;
                           <span class="mr-2">March 15, 2018 </span> &bullet;
                           <span class="mr-2">{{ category_name }}</span> &bullet;
-                          <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+                          <span class="ml-2"><span class="fa fa-comments"></span> {{category_post["nof_comments"]}}</span>
                         </div>
                         <h2>{{ category_post["postTitle"] }}</h2>
                       </span>
@@ -141,15 +141,15 @@
               <div class="col-md-12 text-center">
                 <nav aria-label="Page navigation" class="text-center">
                   <ul class="pagination">
-                    <li class="page-item  {{disable_previous}}"><a class="page-link" href="#">&lt;</a></li>
+                    <li class="page-item  {{disable_previous}}"><a class="page-link" href="http://localhost:5000/category/{{category_subfix}}?page={{ current_page - 1 }}">&lt;</a></li>
                     {% for index, page in pages %}
                       {% if index == current_index %}
-                        <li class="page-item active"><a class="page-link" href="#">{{ page }}</a></li>    
+                        <li class="page-item active"><a class="page-link" href="http://localhost:5000/category/{{category_subfix}}?page={{page}}">{{ page }}</a></li>    
                       {% else %}
-                        <li class="page-item"><a class="page-link" href="#">{{ page }}</a></li>
+                        <li class="page-item"><a class="page-link" href="http://localhost:5000/category/{{category_subfix}}?page={{page}}">{{ page }}</a></li>
                       {% endif %}
                     {% endfor %}
-                    <li class="page-item {{disable_next}}"><a class="page-link" href="#">&gt;</a></li>
+                    <li class="page-item {{disable_next}}"><a class="page-link" href="http://localhost:5000/category/{{category_subfix}}?page={{current_page + 1}}">&gt;</a></li>
                   </ul>
                 </nav>
               </div>
@@ -201,16 +201,14 @@
             <div class="sidebar-box">
               <h3 class="heading">Categories</h3>
               <ul class="categories">
-                <li><a href="#">Food <span>(12)</span></a></li>
-                <li><a href="#">Travel <span>(22)</span></a></li>
-                <li><a href="#">Lifestyle <span>(37)</span></a></li>
-                <li><a href="#">Business <span>(42)</span></a></li>
-                <li><a href="#">Adventure <span>(14)</span></a></li>
+                {% for key, value in category_post_number %}
+                  <li><a href="http://localhost:5000/category/{{ key }}">{{value[0]}} <span>({{ value[1] }})</span></a></li>
+                {% endfor %}
               </ul>
             </div>
             <!-- END sidebar-box -->
 
-            <div class="sidebar-box">
+            <!-- <div class="sidebar-box">
               <h3 class="heading">Tags</h3>
               <ul class="tags">
                 <li><a href="#">Travel</a></li>
@@ -226,7 +224,7 @@
                 <li><a href="#">Business</a></li>
                 <li><a href="#">Freelancing</a></li>
               </ul>
-            </div>
+            </div> -->
           </div>
           <!-- END sidebar -->
 
@@ -251,42 +249,20 @@
                   <h3>Latest Post</h3>
                   <div class="post-entry-sidebar">
                     <ul>
-                      <li>
-                        <a href="">
-                          <img src="http://localhost:5000/static/blog/images/img_6.jpg" alt="Image placeholder" class="mr-4">
-                          <div class="text">
-                            <h4>How to Find the Video Games of Your Youth</h4>
-                            <div class="post-meta">
-                              <span class="mr-2">March 15, 2018 </span> &bullet;
-                              <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+                      {% for latest_post in latest_posts %}
+                        <li>
+                          <a href="http://localhost:5000/{{latest_post['slug']}}">
+                            <img src="{{ latest_post['thumbnail_IMG_URL'] }}" alt="Image placeholder" class="mr-4">
+                            <div class="text">
+                              <h4>{{ latest_post['postTitle'] }}</h4>
+                              <div class="post-meta">
+                                <span class="mr-2"> {{ latest_post["postDate"] }} </span> &bullet;
+                                <!-- <span class="ml-2"><span class="fa fa-comments"></span> 3</span> -->
+                              </div>
                             </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="">
-                          <img src="http://localhost:5000/static/blog/images/img_3.jpg" alt="Image placeholder" class="mr-4">
-                          <div class="text">
-                            <h4>How to Find the Video Games of Your Youth</h4>
-                            <div class="post-meta">
-                              <span class="mr-2">March 15, 2018 </span> &bullet;
-                              <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="">
-                          <img src="http://localhost:5000/static/blog/images/img_4.jpg" alt="Image placeholder" class="mr-4">
-                          <div class="text">
-                            <h4>How to Find the Video Games of Your Youth</h4>
-                            <div class="post-meta">
-                              <span class="mr-2">March 15, 2018 </span> &bullet;
-                              <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
+                          </a>
+                        </li>
+                      {% endfor %}
                     </ul>
                   </div>
                 </div>

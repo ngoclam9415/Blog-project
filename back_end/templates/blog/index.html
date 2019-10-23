@@ -108,7 +108,25 @@
             <div class="col-md-12">
 
               <div class="owl-carousel owl-theme home-slider">
-                
+                {% for latest_post in latest_posts[:4] %}
+                  <div>
+                      <a href="http://localhost:5000/blog/{{latest_post['slug']}}" class="a-block d-flex align-items-center height-lg" style="background-image: url('{{latest_post['thumbnail_IMG_URL']}}'); ">
+                        <div class="text half-to-full">
+                          {% for tag in latest_post["tags"] %}
+                          <span class="category mb-5">{{tag}}</span>
+                          {% endfor %}
+                          <div class="post-meta">
+                            
+                            <span class="author mr-2"><img src="http://localhost:5000/static/blog/images/person_1.jpg" alt="Colorlib"> {{latest_post["email"]}}</span>&bullet;
+                            <span class="mr-2">{{ latest_post["postDate"] }} </span> &bullet;
+                            <span class="ml-2"><span class="fa fa-comments"></span> {{ latest_post["nof_comments"] }}</span>
+                            
+                          </div>
+                          <h3>{{ latest_post["postTitle"] }}</h3>
+                        </div>
+                      </a>
+                    </div>
+                {% endfor %}
               </div>
               
             </div>
@@ -130,20 +148,36 @@
           <div class="row blog-entries">
             <div class="col-md-12 col-lg-8 main-content">
               <div class="row" id="tableContent">
-                
+                {% for latest_post in latest_posts %}
+                  <div class="col-md-6">
+                      <a href="http://localhost:5000/blog/{{latest_post['slug']}}" class="blog-entry element-animate" data-animate-effect="fadeIn">
+                        <img src="{{ latest_post['thumbnail_IMG_URL'] }}"  style="width : 30vw;border: 1px solid #efefef; border-bottom-color : #ffffff;height : 50vh; width:100%" alt="Image placeholder">
+                        <div class="blog-content-body">
+                          <div class="post-meta">
+                            <span class="author mr-2"><img src="http://localhost:5000/static/blog/images/person_1.jpg" alt="Colorlib"> Colorlib</span>&bullet;
+                            <span class="mr-2">{{ latest_post["postDate"] }} </span> &bullet;
+                            <span class="ml-2"><span class="fa fa-comments"></span> {{ latest_post["nof_comments"] }} </span>
+                          </div>
+                          <h2>{{ latest_post["postTitle"] }}</h2>
+                        </div>
+                      </a>
+                    </div>
+                {% endfor %}
               </div>
 
               <div class="row mt-5">
                 <div class="col-md-12 text-center">
                   <nav aria-label="Page navigation" class="text-center">
                     <ul class="pagination">
-                      <li class="page-item"><a class="page-link" href="http://localhost:5000/static/blog/#">&lt;</a></li>
-                      <li class="page-item active"><a class="page-link" href="http://localhost:5000/static/blog/#">1</a></li>
-                      <li class="page-item"><a class="page-link" href="http://localhost:5000/static/blog/#">2</a></li>
-                      <li class="page-item"><a class="page-link" href="http://localhost:5000/static/blog/#">3</a></li>
-                      <li class="page-item"><a class="page-link" href="http://localhost:5000/static/blog/#">4</a></li>
-                      <li class="page-item"><a class="page-link" href="http://localhost:5000/static/blog/#">5</a></li>
-                      <li class="page-item"><a class="page-link" href="http://localhost:5000/static/blog/#">&gt;</a></li>
+                      <li class="page-item {{disable_previous}}"><a class="page-link" href="http://localhost:5000/?page={{ current_page - 1 }}">&lt;</a></li>
+                      {% for index, page in pages %}
+                        {% if index == current_index %}
+                          <li class="page-item active"><a class="page-link" href="http://localhost:5000/?page={{ page }}">{{ page }}</a></li>
+                        {% else %}
+                          <li class="page-item"><a class="page-link" href="http://localhost:5000/?page={{ page }}">{{ page }}</a></li>
+                        {% endif %}
+                      {% endfor %}
+                      <li class="page-item {{disable_next}}"><a class="page-link" href="http://localhost:5000/?page={{ current_page + 1 }}">&gt;</a></li>
                     </ul>
                   </nav>
                 </div>
@@ -152,8 +186,7 @@
 
               
 
-              
-
+        
             </div>
 
             <!-- END main-content -->
@@ -174,12 +207,12 @@
                   <div class="bio-body">
                     <h2>David Craig</h2>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem facilis sunt repellendus excepturi beatae porro debitis voluptate nulla quo veniam fuga sit molestias minus.</p>
-                    <p><a href="http://localhost:5000/static/blog/#" class="btn btn-primary btn-sm rounded">Read my bio</a></p>
+                    <p><a href="#" class="btn btn-primary btn-sm rounded">Read my bio</a></p>
                     <p class="social">
-                      <a href="http://localhost:5000/static/blog/#" class="p-2"><span class="fa fa-facebook"></span></a>
-                      <a href="http://localhost:5000/static/blog/#" class="p-2"><span class="fa fa-twitter"></span></a>
-                      <a href="http://localhost:5000/static/blog/#" class="p-2"><span class="fa fa-instagram"></span></a>
-                      <a href="http://localhost:5000/static/blog/#" class="p-2"><span class="fa fa-youtube-play"></span></a>
+                      <a href="#" class="p-2"><span class="fa fa-facebook"></span></a>
+                      <a href="#" class="p-2"><span class="fa fa-twitter"></span></a>
+                      <a href="#" class="p-2"><span class="fa fa-instagram"></span></a>
+                      <a href="#" class="p-2"><span class="fa fa-youtube-play"></span></a>
                     </p>
                   </div>
                 </div>
@@ -189,7 +222,21 @@
                 <h3 class="heading">Popular Posts</h3>
                 <div class="post-entry-sidebar" id="popular_post">
                   <ul>
-                    
+                    {% for i in range(nof_info) %}
+                      <li>
+                        <a href="http://localhost:5000/blog/{{ recent_post_info[i]['slug'] }}">
+                          <img src="{{recent_post_info[i]['thumbnail_IMG_URL']}}" alt="Image placeholder" class="mr-4">
+                          <div class="text">
+                            <h4>{{ recent_comment_info[] }}</h4>
+                            <h4>{{ recent_comment_info[i]['_id']['text'] }}</h4>
+                          </div>
+                        </a>
+                                <div class="post-meta">
+                                  <span class="mr-2">{{ recent_comment_info[i]['_id']['name'] }} recently comment on {{ recent_comment_info[i]['last_date'] }} </span>
+                                </div>
+                      </li>
+                    {% endfor %}
+
                   </ul>
                 </div>
               </div>
@@ -198,32 +245,30 @@
               <div class="sidebar-box">
                 <h3 class="heading">Categories</h3>
                 <ul class="categories">
-                  <li><a href="http://localhost:5000/static/blog/#">Food <span>(12)</span></a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Travel <span>(22)</span></a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Lifestyle <span>(37)</span></a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Business <span>(42)</span></a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Adventure <span>(14)</span></a></li>
+                  {% for key, value in category_post_number %}
+                    <li><a href="http://localhost:5000/category/{{ key }}">{{value[0]}} <span>({{ value[1] }})</span></a></li>
+                  {% endfor %}
                 </ul>
               </div>
               <!-- END sidebar-box -->
 
-              <div class="sidebar-box">
+              <!-- <div class="sidebar-box">
                 <h3 class="heading">Tags</h3>
                 <ul class="tags">
-                  <li><a href="http://localhost:5000/static/blog/#">Travel</a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Adventure</a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Food</a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Lifestyle</a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Business</a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Freelancing</a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Travel</a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Adventure</a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Food</a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Lifestyle</a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Business</a></li>
-                  <li><a href="http://localhost:5000/static/blog/#">Freelancing</a></li>
+                  <li><a href="#">Travel</a></li>
+                  <li><a href="#">Adventure</a></li>
+                  <li><a href="#">Food</a></li>
+                  <li><a href="#">Lifestyle</a></li>
+                  <li><a href="#">Business</a></li>
+                  <li><a href="#">Freelancing</a></li>
+                  <li><a href="#">Travel</a></li>
+                  <li><a href="#">Adventure</a></li>
+                  <li><a href="#">Food</a></li>
+                  <li><a href="#">Lifestyle</a></li>
+                  <li><a href="#">Business</a></li>
+                  <li><a href="#">Freelancing</a></li>
                 </ul>
-              </div>
+              </div> -->
             </div>
             <!-- END sidebar -->
 
@@ -240,7 +285,7 @@
                 <img src="http://localhost:5000/static/blog/images/img_1.jpg" alt="Image placeholder" class="img-fluid">
               </p>
 
-              <p>Lorem ipsum dolor sit amet sa ksal sk sa, consectetur adipisicing elit. Ipsa harum inventore reiciendis. <a href="http://localhost:5000/static/blog/#">Read More</a></p>
+              <p>Lorem ipsum dolor sit amet sa ksal sk sa, consectetur adipisicing elit. Ipsa harum inventore reiciendis. <a href="#">Read More</a></p>
             </div>
             <div class="col-md-6 ml-auto">
               <div class="row">
@@ -294,23 +339,23 @@
                   <div class="mb-5">
                     <h3>Quick Links</h3>
                     <ul class="list-unstyled">
-                      <li><a href="http://localhost:5000/static/blog/#">About Us</a></li>
-                      <li><a href="http://localhost:5000/static/blog/#">Travel</a></li>
-                      <li><a href="http://localhost:5000/static/blog/#">Adventure</a></li>
-                      <li><a href="http://localhost:5000/static/blog/#">Courses</a></li>
-                      <li><a href="http://localhost:5000/static/blog/#">Categories</a></li>
+                      <li><a href="#">About Us</a></li>
+                      <li><a href="#">Travel</a></li>
+                      <li><a href="#">Adventure</a></li>
+                      <li><a href="#">Courses</a></li>
+                      <li><a href="#">Categories</a></li>
                     </ul>
                   </div>
                   
                   <div class="mb-5">
                     <h3>Social</h3>
                     <ul class="list-unstyled footer-social">
-                      <li><a href="http://localhost:5000/static/blog/#"><span class="fa fa-twitter"></span> Twitter</a></li>
-                      <li><a href="http://localhost:5000/static/blog/#"><span class="fa fa-facebook"></span> Facebook</a></li>
-                      <li><a href="http://localhost:5000/static/blog/#"><span class="fa fa-instagram"></span> Instagram</a></li>
-                      <li><a href="http://localhost:5000/static/blog/#"><span class="fa fa-vimeo"></span> Vimeo</a></li>
-                      <li><a href="http://localhost:5000/static/blog/#"><span class="fa fa-youtube-play"></span> Youtube</a></li>
-                      <li><a href="http://localhost:5000/static/blog/#"><span class="fa fa-snapchat"></span> Snapshot</a></li>
+                      <li><a href="#"><span class="fa fa-twitter"></span> Twitter</a></li>
+                      <li><a href="#"><span class="fa fa-facebook"></span> Facebook</a></li>
+                      <li><a href="#"><span class="fa fa-instagram"></span> Instagram</a></li>
+                      <li><a href="#"><span class="fa fa-vimeo"></span> Vimeo</a></li>
+                      <li><a href="#"><span class="fa fa-youtube-play"></span> Youtube</a></li>
+                      <li><a href="#"><span class="fa fa-snapchat"></span> Snapshot</a></li>
                     </ul>
                   </div>
                 </div>

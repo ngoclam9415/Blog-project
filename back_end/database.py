@@ -65,8 +65,9 @@ class BlogDatabase:
         return dumps(cursors)
 
     def findlimit_post(self,startTime,endTime,limit, skipped_item=1):
-        print(self.post_collection.count() - skipped_item*limit)
-        nof_documents = self.post_collection.count()
+        # Find post tu lau nhat den gan nhat
+        print(self.post_collection.estimated_document_count() - skipped_item*limit)
+        nof_documents = self.post_collection.estimated_document_count()
         if nof_documents < skipped_item*limit:
             skip = (skipped_item-1)*limit
         else:
@@ -123,7 +124,7 @@ class BlogDatabase:
                     "isDeleted" : False})
 
     def query_posts_by_tag(self, tag, startTime, endTime, limit= 10, skipped_item=1):
-        nof_documents = self.db[tag].count()
+        nof_documents = self.db[tag].estimated_document_count()
         print(tag)
         if nof_documents < skipped_item*limit:
             skip = (skipped_item-1)*limit
@@ -132,10 +133,32 @@ class BlogDatabase:
         cursors = self.db[tag].find({"ispublished": True, "isDeleted": False, "postDate": {"$gte" : startTime, "$lte" : endTime}}).sort('time', -1).skip(skip).limit(limit)
         return dumps(cursors), nof_documents
 
+    def comment_collection_find_recent_post(self, limit=3):
+        cursors = self.comment_collection.aggregate([
+            {"$group" : {
+                "_id" : {"slug" : "$slug",
+                "name" : "$commenterName",
+                "email" : "$commenterEmail",
+                "text" : "$CommentText"},
+                "last_date" : {"$max" : "$commentDate"}
+            }},
+            {"$sort" : {"last_date" : -1}},
+            {"$limit" : limit},
+        ])
+        # cursors = dumps(cursors)
+        cursors = list(cursors)
+        print('cursor : ', cursors)
+        field_query_values = [cursor["_id"]["slug"] for cursor in cursors]
+        new_cursors = self.post_collection.find({"slug" : {"$in" : field_query_values}})
+        
+        return list(new_cursors), cursors
+        # return dumps(cursors)
         
 
 if __name__ == '__main__':
     import time
     BDB = BlogDatabase()
-    data = BDB.query_posts_by_tag("AI/ML", 0, time.time(), 6, 1)
+    # data = BDB.query_posts_by_tag("AI/ML", 0, time.time(), 6, 1)
+    data = BDB.comment_collection_find_recent_post()
     print(data)
+    print(type(data))
