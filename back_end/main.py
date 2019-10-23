@@ -117,16 +117,57 @@ def getlimitcomment():
 
 @app.route('/category/<category_name>')
 def show_category_page(category_name):
+    page_number = request.args.get("page", 1)
     if category_name not in category_collection.keys():
         return "INVALID URL"
-    category_posts = db.query_posts_by_tag(category_collection[category_name], 0, time.time(), 10, 1)
+    category_posts, nof_document = db.query_posts_by_tag(category_collection[category_name], 0, time.time(), 10, page_number)
     category_posts = json.loads(category_posts)
+    pages, current_page_index = caculate_page_number(nof_document, page_number, 10, 5)
+    disable_next = ""
+    disable_previous = ""
+    if len(pages):
+        if current_page_index == len(pages) - 1:
+            disable_next = "disabled"
+        if current_page_index == 0:
+            disable_previous = "disabled"
+    else:
+        disable_next = "disabled"
+        disable_previous = "disabled"
     # print(category_posts)
     # print(type(category_posts))
     # print(len(category_posts))
     return render_template("/blog/category.html",
                      category_name=category_collection[category_name], 
-                     category_posts = category_posts)
+                     category_posts = category_posts,
+                     pages=enumerate(pages),
+                     current_index=current_page_index,
+                     disable_next=disable_next,
+                     disable_previous=disable_previous)
+
+def caculate_page_number(total_posts, request_page, nof_post_per_page, nof_displayed_page):
+    if total_posts == 0:
+        return [], 0
+    page_indexes = []
+    if total_posts > request_page*nof_post_per_page :
+        if (total_posts - request_page*nof_post_per_page)//nof_post_per_page + (total_posts%nof_post_per_page > 0) > nof_displayed_page - 1:
+            page_indexes = [i + request_page for i in range(nof_displayed_page)]
+        else: 
+            nof_next_pages = (total_posts - request_page*nof_post_per_page)//nof_post_per_page + (total_posts%nof_post_per_page > 0)
+            # print('nof_next_pages : ',nof_next_pages)
+            # print(" Loop range : {} - {}".format(0, nof_displayed_page - nof_next_pages - 1))
+            for index in reversed(range(nof_displayed_page - nof_next_pages)):
+                print(index)
+                if request_page - index >= 1:
+                    page_indexes.append(request_page - index)
+            for next_page in range(nof_next_pages):
+                # print("next page index : ",next_page + request_page + 1)
+                page_indexes.append(next_page + request_page + 1)
+    else:
+        for index in range(request_page - nof_displayed_page, request_page + 1):
+            if index > 0 :
+                page_indexes.append(index)
+    return page_indexes, page_indexes.index(request_page)
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5000", debug=True)

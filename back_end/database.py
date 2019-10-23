@@ -130,7 +130,7 @@ class BlogDatabase:
         else:
             skip = nof_documents - skipped_item*limit
         cursors = self.db[tag].find({"ispublished": True, "isDeleted": False, "postDate": {"$gte" : startTime, "$lte" : endTime}}).sort('time', -1).skip(skip).limit(limit)
-        return dumps(cursors)
+        return dumps(cursors), nof_documents
 
         
 
