@@ -222,7 +222,7 @@ def show_category_page(category_name):
                      category_posts=category_posts,
                     pages=enumerate(pages),
                      current_index=current_page_index,
-                     current_page=pages[current_page_index] if len(pages) else None,
+                     current_page=pages[current_page_index] if len(pages) else 1,
                      disable_next=disable_next,
                      disable_previous=disable_previous,
                      latest_posts=latest_posts,
