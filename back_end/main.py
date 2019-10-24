@@ -16,8 +16,8 @@ hex_code = generate_random_hexcode()
 # app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
 app = Flask(__name__)
 db = BlogDatabase()
-# BSC = BucketStorageClient()
-BSC = LocalStorageClient(STATIC_FOLDER)
+BSC = BucketStorageClient()
+# BSC = LocalStorageClient(STATIC_FOLDER)
 
 category_collection = {"ai-ml" : "AI/ML",
                         "front-end" : "Front-end",
