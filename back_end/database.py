@@ -95,6 +95,7 @@ class BlogDatabase:
         print(result)
         return result
 
+    
 
     #CommentColection
     def insert_comment(self,slug,commenterName,commenterEmail,CommentText, curtime):
@@ -133,6 +134,18 @@ class BlogDatabase:
         return dumps(cursors), nof_documents
 
         
+
+        #######Thuong########
+    def user_login(self,username,password):
+        user = {'username':username, 'password' :password}
+        #result = self.user_collection.find_one(user)
+        result = self.user_collection.find_one({'username':username, 'userpassword':password})
+        #print(result)
+        return result
+
+    def post_get_all_all(self):
+        cursors = self.post_collection.find()
+        return cursors
 
 if __name__ == '__main__':
     import time

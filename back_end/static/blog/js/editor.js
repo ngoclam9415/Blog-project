@@ -25,7 +25,7 @@ class FileUploader{
         this.request_upload_images(url, files).then(response => {
             console.log(response);
             var title_url =  response.paths[0];
-            $(".jodit_wysiwyg").append('<img src="'+ title_url +'" class="img-thumbnail" style="width: 25%; height: auto;" alt="Responsive image">')
+            $(".jodit_wysiwyg").append('<img src="' + title_url +'" class="img-thumbnail" style="width: 25%; height: auto;" alt="Responsive image">')
         })
     }
 
