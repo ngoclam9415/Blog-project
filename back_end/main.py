@@ -28,14 +28,14 @@ category_collection = {"ai-ml" : "AI/ML",
 @app.route('/')
 def index():
     page_number = int(request.args.get("page", 1))
-    latest_posts = db.findlimit_post(0, time.time(), 10, page_number)
+    latest_posts = db.findlimit_post(0, time.time(), 6, page_number)
     latest_posts = json.loads(latest_posts)
     nof_document = db.post_collection.count_documents({})
     latest_posts.reverse()
     for latest_post in latest_posts:
         latest_post["postDate"] = datetime.fromtimestamp(latest_post["postDate"]).strftime("%B %d, %Y")
         latest_post["nof_comments"] = db.comment_collection.count_documents({"slug" : latest_post["slug"]})
-    pages, current_page_index = caculate_page_number(nof_document, page_number, 10, 5)
+    pages, current_page_index = caculate_page_number(nof_document, page_number, 6, 5)
     disable_next = ""
     disable_previous = ""
     if len(pages):
