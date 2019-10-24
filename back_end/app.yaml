@@ -1,5 +1,5 @@
-runtime: python
-env: flex
+runtime: python37
+# env: flex
 entrypoint: gunicorn -b :$PORT main:app
 
 runtime_config:
@@ -23,5 +23,5 @@ handlers:
 - url: /static
   static_dir: static
   
-- url: /.*
-  script: main.app
+# - url: /.*
+#   script: main.app
