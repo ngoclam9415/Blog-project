@@ -13,7 +13,7 @@ class FileUploader{
             console.log(response)
             var title_url =  response.paths[0]
             if (this.title_img === undefined){
-                $(".site-section.py-lg").prepend('<div class="container>"><img src="'+ title_url +'" class="img-thumbnail rounded mx-auto d-block" style="width: 50%; height: 50%;" alt="Responsive image"></div>')
+                $(".site-section.py-lg").prepend('<div class="container>"><img src="' + title_url +'" class="img-thumbnail rounded mx-auto d-block" style="width: 50%; height: 50%;" alt="Responsive image"></div>')
             } else{
                 $(".img-thumbnail").attr('src', title_url)
             }

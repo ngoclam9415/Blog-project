@@ -25,19 +25,19 @@
     }
   
     render_latest_post(){
-      get_latest_post(get_latest_post_url).then(response => {
-        var posts = JSON.parse(response);
-        for (let i=0; i<posts.length; i++ ){
+    //   get_latest_post(get_latest_post_url).then(response => {
+    //     var posts = JSON.parse(response);
+        // for (let i=0; i<posts.length; i++ ){
           // console.log(posts[i])
-          insert_latest_post(posts[i]);
-          if (i < 3){
-            insert_owl_item(posts[i]);
-            insert_popular_posts(posts[i]);
-          }
+          // insert_latest_post(posts[i]);
+          // if (i < 3){
+            // insert_owl_item(posts[i]);
+            // insert_popular_posts(posts[i]);
+          // }
+          render_home_slider()
         }
-        render_home_slider()
-      })
-    }
+      // })
+    // }
   }
   
   async function get_latest_post(url){
@@ -232,47 +232,47 @@ function add_newpost_button(){
 
 
 
-function insert_latest_post(data){
-  var time = new Date(data.postDate * 1000);
-  var new_data = '<div class="col-md-6"><a href=' + window.location.origin+ '/blog/' +data.slug + ' class="blog-entry element-animate fadeIn element-animated" data-animate-effect="fadeIn" style="background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBt8z5qtrx1xSI80zhZ2h1Ba8xg_D06avqRJwNq49hlGXGGu7D"); ">' + '<img src=' + data.thumbnail_IMG_URL +' style="width : 30vw; height : 50vh" alt="Not \n Available">' + 
-        '<div class="blog-content-body">' + 
-          '<div class="post-meta">' + 
-            '<span class="author mr-2"><img src="' + post_person_image + '" alt="Colorlib"> '+ data.email.split("@")[0] + '</span>' +
-            '<span class="mr-2">'+ time.toDateString() +' </span> ' + 
-            '<span class="ml-2"><span class="fa fa-comments"></span> 3</span>' + 
-          '</div>' + 
-          '<h2>'+ data.postTitle +'</h2>' + 
-        '</div>' + 
-      '</a>' + 
-    '</div>'
-    $("#tableContent").prepend(new_data)
-}
+// function insert_latest_post(data){
+//   var time = new Date(data.postDate * 1000);
+//   var new_data = '<div class="col-md-6"><a href=' + window.location.origin+ '/blog/' +data.slug + ' class="blog-entry element-animate fadeIn element-animated" data-animate-effect="fadeIn" style="background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBt8z5qtrx1xSI80zhZ2h1Ba8xg_D06avqRJwNq49hlGXGGu7D"); ">' + '<img src=' + data.thumbnail_IMG_URL +' style="width : 30vw; height : 50vh" alt="Not \n Available">' + 
+//         '<div class="blog-content-body">' + 
+//           '<div class="post-meta">' + 
+//             '<span class="author mr-2"><img src="' + post_person_image + '" alt="Colorlib"> '+ data.email.split("@")[0] + '</span>' +
+//             '<span class="mr-2">'+ time.toDateString() +' </span> ' + 
+//             '<span class="ml-2"><span class="fa fa-comments"></span> 3</span>' + 
+//           '</div>' + 
+//           '<h2>'+ data.postTitle +'</h2>' + 
+//         '</div>' + 
+//       '</a>' + 
+//     '</div>'
+//     $("#tableContent").prepend(new_data)
+// }
 
-function insert_owl_item(data){
-  var new_data = '<div>  <a href="blog/blog-single.html" class="a-block d-flex align-items-center height-lg" style="background-image: url(\'blog/images/img_1.jpg\'); ">    <div class="text half-to-full">      <span class="category mb-5">Food</span>      <div class="post-meta">                <span class="author mr-2"><img src="' + post_person_image + '" alt="Colorlib"> Colorlib</span>&bullet;        <span class="mr-2">March 15, 2018 </span> &bullet;        <span class="ml-2"><span class="fa fa-comments"></span> 3</span>              </div>      <h3>How to Find the Video Games of Your Youth</h3>    </div>  </a></div>'
-  console.log(data)
-  var inserted_tags = "";
-  for (var tag of data["tags"]){
-    inserted_tags += '<span class="category mb-5">'+ tag +'</span>';
-  }
-  new_data = new_data.replace('<span class="category mb-5">Food</span>', inserted_tags)
+// function insert_owl_item(data){
+//   var new_data = '<div>  <a href="blog/blog-single.html" class="a-block d-flex align-items-center height-lg" style="background-image: url(\'blog/images/img_1.jpg\'); ">    <div class="text half-to-full">      <span class="category mb-5">Food</span>      <div class="post-meta">                <span class="author mr-2"><img src="' + post_person_image + '" alt="Colorlib"> Colorlib</span>&bullet;        <span class="mr-2">March 15, 2018 </span> &bullet;        <span class="ml-2"><span class="fa fa-comments"></span> 3</span>              </div>      <h3>How to Find the Video Games of Your Youth</h3>    </div>  </a></div>'
+//   console.log(data)
+//   var inserted_tags = "";
+//   for (var tag of data["tags"]){
+//     inserted_tags += '<span class="category mb-5">'+ tag +'</span>';
+//   }
+//   new_data = new_data.replace('<span class="category mb-5">Food</span>', inserted_tags)
   
-  var time = new Date(data.postDate*1000);
-  new_data = new_data.replace("blog/blog-single.html", window.location.origin+ '/blog/' +data.slug);
-  new_data = new_data.replace("blog/images/img_1.jpg", data.thumbnail_IMG_URL);
-  new_data = new_data.replace("How to Find the Video Games of Your Youth", data.postTitle);
-  new_data = new_data.replace("> Colorlib<", ">" + window.localStorage.getItem("email") + "<");
-  new_data = new_data.replace("March 15, 2018", time.toDateString())
-  console.log(new_data)
-  $(".owl-carousel.owl-theme.home-slider").prepend(new_data);
-}
+//   var time = new Date(data.postDate*1000);
+//   new_data = new_data.replace("blog/blog-single.html", window.location.origin+ '/blog/' +data.slug);
+//   new_data = new_data.replace("blog/images/img_1.jpg", data.thumbnail_IMG_URL);
+//   new_data = new_data.replace("How to Find the Video Games of Your Youth", data.postTitle);
+//   new_data = new_data.replace("> Colorlib<", ">" + window.localStorage.getItem("email") + "<");
+//   new_data = new_data.replace("March 15, 2018", time.toDateString())
+//   console.log(new_data)
+//   $(".owl-carousel.owl-theme.home-slider").prepend(new_data);
+// }
 
-function insert_popular_posts(data){
-  var time = new Date(data.postDate*1000);
-  var new_data = '<li>  <a href="blog/">    <img src="blog/images/img_2.jpg" alt="Image placeholder" class="mr-4">    <div class="text">      <h4>How to Find the Video Games of Your Youth</h4>          </div>  </a><div class="post-meta">        <span class="mr-2">March 15, 2018 </span>      </div></li>'
-  new_data = new_data.replace("blog/", window.location.origin+ '/blog/' +data.slug);
-  new_data = new_data.replace("March 15, 2018", time.toDateString())
-  new_data = new_data.replace('blog/images/img_2.jpg', data.thumbnail_IMG_URL);
-  new_data = new_data.replace("How to Find the Video Games of Your Youth", data.postTitle)
-  $("#popular_post").find("ul").prepend(new_data);
-}
+// function insert_popular_posts(data){
+//   var time = new Date(data.postDate*1000);
+//   var new_data = '<li>  <a href="blog/">    <img src="blog/images/img_2.jpg" alt="Image placeholder" class="mr-4">    <div class="text">      <h4>How to Find the Video Games of Your Youth</h4>          </div>  </a><div class="post-meta">        <span class="mr-2">March 15, 2018 </span>      </div></li>'
+//   new_data = new_data.replace("blog/", window.location.origin+ '/blog/' +data.slug);
+//   new_data = new_data.replace("March 15, 2018", time.toDateString())
+//   new_data = new_data.replace('blog/images/img_2.jpg', data.thumbnail_IMG_URL);
+//   new_data = new_data.replace("How to Find the Video Games of Your Youth", data.postTitle)
+//   $("#popular_post").find("ul").prepend(new_data);
+// }

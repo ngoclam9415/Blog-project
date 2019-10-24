@@ -6,8 +6,8 @@ from bson.json_util import dumps
 
 class BlogDatabase:
     def __init__(self):
-        # self.cluster = MongoClient("mongodb+srv://dat:mothai34@cluster0-4qfvw.mongodb.net/test?retryWrites=true&w=majority")
-        self.cluster = MongoClient("localhost", 27017)
+        self.cluster = MongoClient("mongodb+srv://dat:mothai34@cluster0-4qfvw.mongodb.net/test?retryWrites=true&w=majority")
+        # self.cluster = MongoClient("localhost", 27017)
         self.db = self.cluster["blogDb"]
         self.user_collection = self.db["usertb"]
         self.post_collection = self.db["posttb"]
@@ -65,8 +65,9 @@ class BlogDatabase:
         return dumps(cursors)
 
     def findlimit_post(self,startTime,endTime,limit, skipped_item=1):
-        print(self.post_collection.count() - skipped_item*limit)
-        nof_documents = self.post_collection.count()
+        # Find post tu lau nhat den gan nhat
+        print(self.post_collection.estimated_document_count() - skipped_item*limit)
+        nof_documents = self.post_collection.estimated_document_count()
         if nof_documents < skipped_item*limit:
             skip = (skipped_item-1)*limit
         else:
@@ -123,7 +124,7 @@ class BlogDatabase:
                     "isDeleted" : False})
 
     def query_posts_by_tag(self, tag, startTime, endTime, limit= 10, skipped_item=1):
-        nof_documents = self.db[tag].count()
+        nof_documents = self.db[tag].estimated_document_count()
         print(tag)
         if nof_documents < skipped_item*limit:
             skip = (skipped_item-1)*limit
@@ -132,10 +133,39 @@ class BlogDatabase:
         cursors = self.db[tag].find({"ispublished": True, "isDeleted": False, "postDate": {"$gte" : startTime, "$lte" : endTime}}).sort('time', -1).skip(skip).limit(limit)
         return dumps(cursors), nof_documents
 
+    def comment_collection_find_recent_post(self, limit=3):
+        cursors = self.comment_collection.aggregate([
+            {"$group" : {
+                "_id" : "$slug",
+                "name" : {"$last" : "$commenterName"},
+                "email" : {"$last" : "$commenterEmail"},
+                "text" : {"$last" : "$CommentText"},
+                "last_date" : {"$last" : "$commentDate"}
+            }},
+            {"$sort" : {"last_date" : -1}},
+            {"$limit" : limit},
+        ])
+        # cursors = dumps(cursors)
+        cursors = list(cursors)
+        print('cursor : ', cursors)
+        print("limit = ", limit)
+        print("len of cursors : ",len(cursors))
+        field_query_values = [cursor["_id"] for cursor in cursors]
+        new_cursors = self.post_collection.find({"slug" : {"$in" : field_query_values}})
+        # return_post_info = []
+        sort_key = {}
+        for cursor in cursors:
+            sort_key[cursor["_id"]] = cursor["last_date"]
+        new_cursors = sorted(new_cursors, key = lambda k : sort_key[k['slug']], reverse=True)
+        
+        return list(new_cursors), cursors
+        # return dumps(cursors)
         
 
 if __name__ == '__main__':
     import time
     BDB = BlogDatabase()
-    data = BDB.query_posts_by_tag("AI/ML", 0, time.time(), 6, 1)
+    # data = BDB.query_posts_by_tag("AI/ML", 0, time.time(), 6, 1)
+    data = BDB.comment_collection_find_recent_post()
     print(data)
+    print(type(data))
