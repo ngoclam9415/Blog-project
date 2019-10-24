@@ -141,15 +141,15 @@
               <div class="col-md-12 text-center">
                 <nav aria-label="Page navigation" class="text-center">
                   <ul class="pagination">
-                    <li class="page-item  {{disable_previous}}"><a class="page-link" href="http://localhost:5000/category/{{category_subfix}}?page={{ current_page - 1 }}">&lt;</a></li>
+                    <li class="page-item  {{disable_previous}}"><a class="page-link" href="http://localhost:5000/category/{{category_subfix}}/?page={{ current_page - 1 }}">&lt;</a></li>
                     {% for index, page in pages %}
                       {% if index == current_index %}
-                        <li class="page-item active"><a class="page-link" href="http://localhost:5000/category/{{category_subfix}}?page={{page}}">{{ page }}</a></li>    
+                        <li class="page-item active"><a class="page-link" href="http://localhost:5000/category/{{category_subfix}}/?page={{page}}">{{ page }}</a></li>    
                       {% else %}
-                        <li class="page-item"><a class="page-link" href="http://localhost:5000/category/{{category_subfix}}?page={{page}}">{{ page }}</a></li>
+                        <li class="page-item"><a class="page-link" href="http://localhost:5000/category/{{category_subfix}}/?page={{page}}">{{ page }}</a></li>
                       {% endif %}
                     {% endfor %}
-                    <li class="page-item {{disable_next}}"><a class="page-link" href="http://localhost:5000/category/{{category_subfix}}?page={{current_page + 1}}">&gt;</a></li>
+                    <li class="page-item {{disable_next}}"><a class="page-link" href="http://localhost:5000/category/{{category_subfix}}/?page={{current_page + 1}}">&gt;</a></li>
                   </ul>
                 </nav>
               </div>
@@ -192,7 +192,21 @@
               <h3 class="heading">Popular Posts</h3>
               <div class="post-entry-sidebar" id="popular_post">
                 <ul>
-                  
+                    {% for i in range(nof_info) %}
+                    <li>
+                      <a href="http://localhost:5000/blog/{{ recent_post_info[i]['slug'] }}">
+                        <img src="{{recent_post_info[i]['thumbnail_IMG_URL']}}" alt="Image placeholder" class="mr-4">
+                        <div class="text">
+                          <h4>{{ recent_post_info[i]["postTitle"] }}</h4>
+                          <!-- <h4>{{ recent_comment_info[i]['text'] }}</h4> -->
+                        </div>
+                      </a>
+                      <div class="post-meta">
+                        <span class="mr-2">{{ recent_comment_info[i]['name'] }} recently comment on {{ recent_comment_info[i]['last_date'] }} : </span>
+                        <span class="mr-4">{{ recent_comment_info[i]['text'] }}</span>
+                      </div>
+                    </li>
+                  {% endfor %}
                 </ul>
               </div>
             </div>
@@ -251,7 +265,7 @@
                     <ul>
                       {% for latest_post in latest_posts %}
                         <li>
-                          <a href="http://localhost:5000/{{latest_post['slug']}}">
+                          <a href="http://localhost:5000/blog/{{latest_post['slug']}}">
                             <img src="{{ latest_post['thumbnail_IMG_URL'] }}" alt="Image placeholder" class="mr-4">
                             <div class="text">
                               <h4>{{ latest_post['postTitle'] }}</h4>

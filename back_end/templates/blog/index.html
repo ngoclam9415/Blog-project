@@ -227,18 +227,19 @@
                         <a href="http://localhost:5000/blog/{{ recent_post_info[i]['slug'] }}">
                           <img src="{{recent_post_info[i]['thumbnail_IMG_URL']}}" alt="Image placeholder" class="mr-4">
                           <div class="text">
-                            <h4>{{ recent_comment_info[] }}</h4>
-                            <h4>{{ recent_comment_info[i]['_id']['text'] }}</h4>
+                            <h4>{{ recent_post_info[i]["postTitle"] }}</h4>
+                            <!-- <h4>{{ recent_comment_info[i]['text'] }}</h4> -->
                           </div>
                         </a>
-                                <div class="post-meta">
-                                  <span class="mr-2">{{ recent_comment_info[i]['_id']['name'] }} recently comment on {{ recent_comment_info[i]['last_date'] }} </span>
-                                </div>
+                        <div class="post-meta">
+                          <span class="mr-2">{{ recent_comment_info[i]['name'] }} recently comment on {{ recent_comment_info[i]['last_date'] }} : </span>
+                          <span class="mr-4">{{ recent_comment_info[i]['text'] }}</span>
+                        </div>
                       </li>
                     {% endfor %}
 
                   </ul>
-                </div>
+                </img>
               </div>
               <!-- END sidebar-box -->
 

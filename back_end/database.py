@@ -136,11 +136,11 @@ class BlogDatabase:
     def comment_collection_find_recent_post(self, limit=3):
         cursors = self.comment_collection.aggregate([
             {"$group" : {
-                "_id" : {"slug" : "$slug",
-                "name" : "$commenterName",
-                "email" : "$commenterEmail",
-                "text" : "$CommentText"},
-                "last_date" : {"$max" : "$commentDate"}
+                "_id" : "$slug",
+                "name" : {"$last" : "$commenterName"},
+                "email" : {"$last" : "$commenterEmail"},
+                "text" : {"$last" : "$CommentText"},
+                "last_date" : {"$last" : "$commentDate"}
             }},
             {"$sort" : {"last_date" : -1}},
             {"$limit" : limit},
@@ -148,8 +148,15 @@ class BlogDatabase:
         # cursors = dumps(cursors)
         cursors = list(cursors)
         print('cursor : ', cursors)
-        field_query_values = [cursor["_id"]["slug"] for cursor in cursors]
+        print("limit = ", limit)
+        print("len of cursors : ",len(cursors))
+        field_query_values = [cursor["_id"] for cursor in cursors]
         new_cursors = self.post_collection.find({"slug" : {"$in" : field_query_values}})
+        # return_post_info = []
+        sort_key = {}
+        for cursor in cursors:
+            sort_key[cursor["_id"]] = cursor["last_date"]
+        new_cursors = sorted(new_cursors, key = lambda k : sort_key[k['slug']], reverse=True)
         
         return list(new_cursors), cursors
         # return dumps(cursors)

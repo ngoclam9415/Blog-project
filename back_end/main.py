@@ -5,7 +5,7 @@ import time
 from utils.random_generator import generate_random_hexcode
 from utils.bucket_uploader import BucketStorageClient, LocalStorageClient
 from database import BlogDatabase
-from datetime import date
+from datetime import datetime
 import json
 import logging
 
@@ -33,7 +33,7 @@ def index():
     nof_document = db.post_collection.count_documents({})
     latest_posts.reverse()
     for latest_post in latest_posts:
-        latest_post["postDate"] = date.fromtimestamp(latest_post["postDate"]).strftime("%B %d, %Y")
+        latest_post["postDate"] = datetime.fromtimestamp(latest_post["postDate"]).strftime("%B %d, %Y")
         latest_post["nof_comments"] = db.comment_collection.count_documents({"slug" : latest_post["slug"]})
     pages, current_page_index = caculate_page_number(nof_document, page_number, 10, 5)
     disable_next = ""
@@ -53,11 +53,12 @@ def index():
 
     # recently_commented_post 
     recent_post_info, recent_comment_info = db.comment_collection_find_recent_post(limit=3)
+    print('recent_post_info : ',recent_post_info )
 
     # format [{'_id': {'slug': 'this-is-event-driven-system', 'name': 'Dat', 'email': 'datnn@athena.studio', 'text': 'Hello this is good'}, 'last_date': 1571825624.113014}, {'_id': {'slug': 'meo-uong-sua', 'name': 'Dat', 'email': 'datnn@athena.studio', 'text': 'Whattttt'}, 'last_date': 1571824885.201149}, {'_id': {'slug': 'meo-uong-sua', 'name': 'Dat', 'email': 'datnn@athena.studio', 'text': 'Hehe'}, 'last_date': 1571824876.3144479}]
 
     for recent_comment in recent_comment_info:
-        recent_comment['last_date'] = date.fromtimestamp(recent_comment['last_date']).strftime("%B %d, %Y AT %I:%M%p")
+        recent_comment['last_date'] = datetime.fromtimestamp(recent_comment['last_date']).strftime("%B %d, %Y AT %I:%M%p")
 
     
     return render_template('blog/index.html', 
@@ -122,9 +123,30 @@ def show_post(slug):
         for comment in comments:
             print(comment)
             print(type(comment))
-            comment["commentDate"] = date.fromtimestamp(comment["commentDate"]).strftime("%B %d, %Y AT %I:%M%p")
+            comment["commentDate"] = datetime.fromtimestamp(comment["commentDate"]).strftime("%B %d, %Y AT %I:%M%p")
             # print(comm)
-        return render_template("blog/blog-slug.html", text_title=data["postTitle"], content=data['postContent'], cover_image=data['thumbnail_IMG_URL'], comments_len=len(comments), comments=comments, tags=data["tags"])
+
+
+        latest_posts = db.findlimit_post(0, time.time(), 3, 1)
+        latest_posts = json.loads(latest_posts)
+        latest_posts.reverse()
+        for latest_post in latest_posts:
+            latest_post["postDate"] = datetime.fromtimestamp(latest_post["postDate"]).strftime("%B %d, %Y")
+
+        category_post_number = {}
+        for key, value in category_collection.items():
+            category_post_number[key] = (value, db.db[value].estimated_document_count())
+
+        recent_post_info, recent_comment_info = db.comment_collection_find_recent_post(limit=3)
+        for recent_comment in recent_comment_info:
+            recent_comment['last_date'] = datetime.fromtimestamp(recent_comment['last_date']).strftime("%B %d, %Y AT %I:%M%p")
+
+        return render_template("blog/blog-slug.html", text_title=data["postTitle"], content=data['postContent'], cover_image=data['thumbnail_IMG_URL'], comments_len=len(comments), comments=comments, tags=data["tags"], postDate = datetime.fromtimestamp(data["postDate"]).strftime("%B %d, %Y AT %I:%M%p"),
+                    category_post_number=category_post_number.items(),
+                    latest_posts=latest_posts,
+                    recent_post_info=recent_post_info,
+                    recent_comment_info=recent_comment_info,
+                    nof_info = len(recent_post_info))
     else:
         return render_template("blog/contact.html")
 
@@ -166,7 +188,7 @@ def show_category_page(category_name):
     category_posts, nof_document = db.query_posts_by_tag(category_collection[category_name], 0, time.time(), 10, page_number)
     category_posts = json.loads(category_posts)
     for category_post in category_posts:
-        category_post["postDate"] = date.fromtimestamp(category_post["postDate"]).strftime("%B %d, %Y")
+        category_post["postDate"] = datetime.fromtimestamp(category_post["postDate"]).strftime("%B %d, %Y")
         category_post["nof_comments"] = db.comment_collection.count_documents({"slug" : category_post["slug"]})
     pages, current_page_index = caculate_page_number(nof_document, page_number, 10, 5)
     disable_next = ""
@@ -180,18 +202,21 @@ def show_category_page(category_name):
         disable_next = "disabled"
         disable_previous = "disabled"
 
-    latest_posts = db.findlimit_post(0, time.time(), 10, 1)
+    latest_posts = db.findlimit_post(0, time.time(), 3, 1)
     latest_posts = json.loads(latest_posts)
     latest_posts.reverse()
     for latest_post in latest_posts:
-        latest_post["postDate"] = date.fromtimestamp(latest_post["postDate"]).strftime("%B %d, %Y")
-    print("latest post type : ", latest_posts)
-    # print(category_posts)
-    # print(type(category_posts))
-    # print(len(category_posts))
+        latest_post["postDate"] = datetime.fromtimestamp(latest_post["postDate"]).strftime("%B %d, %Y")
+    
     category_post_number = {}
     for key, value in category_collection.items():
         category_post_number[key] = (value, db.db[value].estimated_document_count())
+    print(latest_posts)
+    
+    recent_post_info, recent_comment_info = db.comment_collection_find_recent_post(limit=3)
+    for recent_comment in recent_comment_info:
+        recent_comment['last_date'] = datetime.fromtimestamp(recent_comment['last_date']).strftime("%B %d, %Y AT %I:%M%p")
+    print('recent_post_info : ',recent_post_info )
     return render_template("/blog/category.html",
                      category_name=category_collection[category_name], 
                      category_posts=category_posts,
@@ -202,7 +227,10 @@ def show_category_page(category_name):
                      disable_previous=disable_previous,
                      latest_posts=latest_posts,
                      category_post_number=category_post_number.items(),
-                     category_subfix=category_name)
+                     category_subfix=category_name,
+                     recent_post_info=recent_post_info,
+                    recent_comment_info=recent_comment_info,
+                    nof_info = len(recent_post_info))
 
 def caculate_page_number(total_posts, request_page, nof_post_per_page, nof_displayed_page):
     if total_posts == 0:
