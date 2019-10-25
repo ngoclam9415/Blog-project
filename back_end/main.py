@@ -322,6 +322,11 @@ def update_post():
     results = db.update_post(data.get("_id"), data.get("postTitle"), data.get("email"), data.get("thumbnail_IMG_URL"), data.get("slug"), data.get("postContent"), data.get("ispublish"), data.get("tags"))
     return jsonify({"message" : "Update post successfully"})
     
+@app.route("/delete_post",methods =["POST"])
+def delete_post():
+   data = request.get_json()
+   db.delete_post_by_slug(data.get("slug"))
+   return jsonify({"message" : "Delete post successfully"})
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5000", debug=True)

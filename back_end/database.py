@@ -179,7 +179,15 @@ class BlogDatabase:
                     "isDeleted" : False}}, upsert=True)
 
     def delete_to_tag_collection(self, tag, id):
-        self.db[tag].remove({"_id" : ObjectId(id)})     
+        self.db[tag].remove({"_id" : ObjectId(id)})   
+
+    def delete_post_by_slug(self, slug):
+    #    result = self.post_collection.update_one({"slug": slug},{"$set":{"isDeleted": True}})
+        self.post_collection.remove({"slug": slug})
+        for tag in ["AI/ML", "Front-end", "Back-end", "System","Data"]:
+            # self.db[tag].update_one({"slug": slug},{"$set":{"isDeleted": True}})
+            self.db[tag].remove({"slug" : slug})
+        
 
 if __name__ == '__main__':
     import time

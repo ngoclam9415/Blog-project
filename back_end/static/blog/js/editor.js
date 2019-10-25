@@ -72,6 +72,7 @@ $(document).ready(function(){
         alert('The file "' + fileName.name +  '" has been selected.');
     });
     $("#post-btn").on("click", post_blog);
+    $("#draft-btn").on("click", draft_blog)
 });
 // add_input_file_button()
 
@@ -108,7 +109,9 @@ function post_blog(){
     }
     send_blog_request(upload_post_url, data, ispublish=true).then(response => {
         console.log(response);
-        window.location.href = window.location.origin + "/blog/" + data.slug;
+        // window.location.href = window.location.origin + "/blog/" + data.slug;
+        window.open(window.location.origin + "/blog/" + data.slug);
+        window.location.href = window.location.origin + "/management"
         // console.log(window.location.origin + "/blog/" + data.slug);
     })
 }
@@ -124,7 +127,9 @@ function draft_blog(){
     }
     send_blog_request(upload_post_url, data, ispublish=false).then(response => {
         console.log(response);
-        window.location.href = window.location.origin + "/blog/" + data.slug;
+        // window.location.href = window.location.origin + "/blog/" + data.slug;
+        window.open(window.location.origin + "/blog/" + data.slug);
+        window.location.href = window.location.origin + "/management"
     })
 }
 
