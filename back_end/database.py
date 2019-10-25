@@ -53,11 +53,13 @@ class BlogDatabase:
     # def find_latest_comment_post(self, nof_post):
         # self.comment_collection.distinct("")
 
-    def update_post(self,postid, postTitle,email,thumbnail_IMG_URL,slug,postContent):
+    def update_post(self,postid, postTitle,email,thumbnail_IMG_URL,slug,postContent, ispublished, tags):
         curtime = time.time()
         querry= {"_id": ObjectId(postid)}
-        post = {"$set":{"postTitle":postTitle, "postDate": curtime, "email":email, "thumbnail_IMG_URL" : thumbnail_IMG_URL, "slug": slug, "postContent": postContent, "ispublished": True,"isDeleted": False}}
+        post = {"$set":{"postTitle":postTitle, "postDate": curtime, "email":email, "thumbnail_IMG_URL" : thumbnail_IMG_URL, "slug": slug, "postContent": postContent, "ispublished": ispublished,"isDeleted": False, "tags" : tags}}
         result = self.post_collection.update_one(querry,post)
+        for tag in tags:
+            self.update_to_tag_collection(tag, postid, slug, curtime, thumbnail_IMG_URL, postTitle, email, ispublished)
         return result
 
     def findall_post(self):
@@ -143,7 +145,7 @@ class BlogDatabase:
                 "last_date" : {"$last" : "$commentDate"}
             }},
             {"$sort" : {"last_date" : -1}},
-            {"$limit" : limit},
+            # {"$limit" : limit},
         ])
         # cursors = dumps(cursors)
         cursors = list(cursors)
@@ -151,7 +153,7 @@ class BlogDatabase:
         print("limit = ", limit)
         print("len of cursors : ",len(cursors))
         field_query_values = [cursor["_id"] for cursor in cursors]
-        new_cursors = self.post_collection.find({"slug" : {"$in" : field_query_values}})
+        new_cursors = self.post_collection.find({"slug" : {"$in" : field_query_values}, "ispublished": True, "isDeleted": False}).limit(limit)
         # return_post_info = []
         sort_key = {}
         for cursor in cursors:
@@ -160,6 +162,31 @@ class BlogDatabase:
         
         return list(new_cursors), cursors
         # return dumps(cursors)
+
+    def post_collection_modify_post_stage(self, slug, ispublished):
+        self.post_collection.update({"slug" : slug}, {"$set" : {"ispublished" : ispublished}})
+        
+
+    def update_to_tag_collection(self, tag, id, slug, curtime,thumbnail_IMG_URL, postTitle, email, ispublished):
+        object_id = ObjectId(id)
+
+        self.db[tag].update_one({"_id" : object_id},{ "$set" :  
+                    {"slug" : slug, "postDate" : curtime, 
+                    "thumbnail_IMG_URL" : thumbnail_IMG_URL, 
+                    "postTitle" : postTitle,
+                    "email" : email,
+                    "ispublished" : ispublished,
+                    "isDeleted" : False}}, upsert=True)
+
+    def delete_to_tag_collection(self, tag, id):
+        self.db[tag].remove({"_id" : ObjectId(id)})   
+
+    def delete_post_by_slug(self, slug):
+    #    result = self.post_collection.update_one({"slug": slug},{"$set":{"isDeleted": True}})
+        self.post_collection.remove({"slug": slug})
+        for tag in ["AI/ML", "Front-end", "Back-end", "System","Data"]:
+            # self.db[tag].update_one({"slug": slug},{"$set":{"isDeleted": True}})
+            self.db[tag].remove({"slug" : slug})
         
 
 if __name__ == '__main__':

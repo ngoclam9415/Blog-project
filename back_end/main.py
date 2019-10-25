@@ -292,6 +292,41 @@ def show_editor_page():
     if g.user:
         return render_template("login/html/editor_page.html")
 
+@app.route('/update_post_stage', methods=["POST"])
+def modify_post_stage():
+    data = request.get_json()
+    db.post_collection_modify_post_stage(data.get("slug"), data.get("ispublished"))
+    return jsonify({"message" : "Modify stage change successfully"})
+
+@app.route('/management/editor/<slug>')
+def show_editor_slug(slug):
+    # data = db.findpost(slug)
+    # if data is None:
+    #     return "PAGE IS NOT AVAILABLE"
+    return render_template("login/html/editor_page_slug.html")
+
+@app.route('/get_slug_information', methods=["POST"])
+def get_slug_information():
+    data = request.get_json()
+    slug_information = db.findpost(data.get("slug"))
+    slug_information["_id"] = str(slug_information["_id"])
+    return jsonify(slug_information)
+
+@app.route('/update_post', methods=["POST"])
+def update_post():
+    data = request.get_json()
+    print(data)
+    not_available_tags = [tag for tag in data.get("previous_tags") if tag not in data.get("tags")]
+    for tag in not_available_tags:
+        db.delete_to_tag_collection(tag, data.get("_id"))
+    results = db.update_post(data.get("_id"), data.get("postTitle"), data.get("email"), data.get("thumbnail_IMG_URL"), data.get("slug"), data.get("postContent"), data.get("ispublish"), data.get("tags"))
+    return jsonify({"message" : "Update post successfully"})
+    
+@app.route("/delete_post",methods =["POST"])
+def delete_post():
+   data = request.get_json()
+   db.delete_post_by_slug(data.get("slug"))
+   return jsonify({"message" : "Delete post successfully"})
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5000", debug=True)
