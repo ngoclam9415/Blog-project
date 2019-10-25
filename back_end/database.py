@@ -107,8 +107,8 @@ class BlogDatabase:
 
     def delete_comment(self,comentid):
         result = self.comment_collection.delete_one({"_id": ObjectId(comentid)})
-        print(result)
-        return result
+        # print(result)
+        # return result
 
     def getcommentofpost(self,slug,timestart,endtime,commentnumber):
         data = []
@@ -184,15 +184,23 @@ class BlogDatabase:
     def delete_post_by_slug(self, slug):
     #    result = self.post_collection.update_one({"slug": slug},{"$set":{"isDeleted": True}})
         self.post_collection.remove({"slug": slug})
+        self.comment_collection.remove({"slug" : slug})
         for tag in ["AI/ML", "Front-end", "Back-end", "System","Data"]:
             # self.db[tag].update_one({"slug": slug},{"$set":{"isDeleted": True}})
             self.db[tag].remove({"slug" : slug})
         
+    def query_commentId_as_string(self, slug):
+        cursors = self.comment_collection.find({"slug" : slug})
+        cursors = list(cursors)
+        for cursor in cursors:
+            cursor["_id"] = str(cursor["_id"])
+        return cursors
 
 if __name__ == '__main__':
     import time
     BDB = BlogDatabase()
     # data = BDB.query_posts_by_tag("AI/ML", 0, time.time(), 6, 1)
-    data = BDB.comment_collection_find_recent_post()
+    # data = BDB.comment_collection_find_recent_post()
+    data = db.query_commentId_as_string("asdasd-testing-some-thing")
     print(data)
     print(type(data))

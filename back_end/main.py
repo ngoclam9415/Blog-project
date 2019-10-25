@@ -291,6 +291,8 @@ def clear_session():
 def show_editor_page():
     if g.user:
         return render_template("login/html/editor_page.html")
+    else:
+        return redirect("/secret_ingredient")
 
 @app.route('/update_post_stage', methods=["POST"])
 def modify_post_stage():
@@ -303,7 +305,8 @@ def show_editor_slug(slug):
     # data = db.findpost(slug)
     # if data is None:
     #     return "PAGE IS NOT AVAILABLE"
-    return render_template("login/html/editor_page_slug.html")
+    comments = db.query_commentId_as_string(slug)
+    return render_template("login/html/editor_page_slug.html", comments = comments)
 
 @app.route('/get_slug_information', methods=["POST"])
 def get_slug_information():
@@ -327,6 +330,14 @@ def delete_post():
    data = request.get_json()
    db.delete_post_by_slug(data.get("slug"))
    return jsonify({"message" : "Delete post successfully"})
+
+@app.route("/delete_comment", methods=["POST"])
+def delete_comment():
+    data = request.get_json()
+    db.delete_comment(data.get('_id'))
+    return jsonify({"message" : "Delete comment successfully"})
+
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5000", debug=True)

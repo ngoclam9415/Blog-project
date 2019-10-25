@@ -156,6 +156,30 @@
             <!-- Default Dark Table -->
             <!-- End Default Dark Table -->
           </div>
+          <div class="main-content-container container-fluid px-4">
+              <table class="table" >
+                  <thead>
+                    <tr>
+                      <th scope="col">id</th>
+                      <th scope="col">Commentor</th>
+                      <th scope="col">Time</th>
+                      <th scope="col">Text</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="comment_table">
+                    {% for comment in comments %}
+                      <tr>
+                        <th scope="row">{{ comment["_id"] }}</th>
+                        <td>{{ comment["commenterName"] }}</td>
+                        <td>{{ comment["commentDate"] }}</td>
+                        <td>{{ comment["CommentText"] }}</td>
+                        <td><button href="#" class="btn btn-danger  active" role="button" aria-pressed="true"><i class="material-icons">X</i></button></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+          </div>
           <footer class="main-footer d-flex p-2 px-3 bg-white border-top">
             <ul class="nav">
               

@@ -1,10 +1,11 @@
 var url_list = window.location.href.split('/');
 var slug = url_list[url_list.length - 1];
 var get_post_information_url = window.location.origin + '/get_slug_information'
-
 var upload_file = [];
 var upload_images_url = window.location.origin +  "/save_images";
 var upload_post_url = window.location.origin + "/update_post";
+var delete_comment_url = window.location.origin + "/delete_comment";
+
 var list_of_tags = ["AI/ML", "Front-end", "Back-end", "System", "Data"]
 var global_variable = undefined;
 
@@ -79,7 +80,16 @@ $(document).ready(function(){
         alert('The file "' + fileName.name +  '" has been selected.');
     });
     $("#post-btn").on("click", post_blog);
-    $("#draft-btn").on("click", draft_blog)
+    $("#draft-btn").on("click", draft_blog);
+    $("#comment_table").find(".btn-danger").on("click", function(){
+        var comment_id = $(this).closest("tr").find("th").text();
+        var data = {"_id" : comment_id};
+        $(this).closest("tr").remove();
+        delete_comment_info(delete_comment_url, data).then(response => {
+            console.log(response)
+        })
+    })
+    
 });
 // add_input_file_button()
 
@@ -220,3 +230,15 @@ get_post_information(get_post_information_url, slug).then(response => {
       });
 })
 
+
+
+async function delete_comment_info(url, data){
+    const response = await fetch(url, {
+        method : "POST",
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(data)
+    });
+    return await response.json();
+}
