@@ -315,7 +315,11 @@ def get_slug_information():
 @app.route('/update_post', methods=["POST"])
 def update_post():
     data = request.get_json()
-    result = db.update_post(data.get("_id"), data.get("postTitle"), data.get("email"), data.get("thumbnail_IMG_URL"), data.get("slug"), data.get("postContent"), data.get("ispublish"), data.get("tags"))
+    print(data)
+    not_available_tags = [tag for tag in data.get("previous_tags") if tag not in data.get("tags")]
+    for tag in not_available_tags:
+        db.delete_to_tag_collection(tag, data.get("_id"))
+    results = db.update_post(data.get("_id"), data.get("postTitle"), data.get("email"), data.get("thumbnail_IMG_URL"), data.get("slug"), data.get("postContent"), data.get("ispublish"), data.get("tags"))
     return jsonify({"message" : "Update post successfully"})
     
 

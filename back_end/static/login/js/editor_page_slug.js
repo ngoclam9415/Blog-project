@@ -79,6 +79,7 @@ $(document).ready(function(){
         alert('The file "' + fileName.name +  '" has been selected.');
     });
     $("#post-btn").on("click", post_blog);
+    $("#draft-btn").on("click", draft_blog)
 });
 // add_input_file_button()
 
@@ -110,29 +111,44 @@ function post_blog(){
         postTitle : title, 
         email : window.localStorage.getItem("email"),
         thumbnail_IMG_URL : fileUploader.title_img,
-        slug : slugify(title),
+        slug : global_variable.slug,
         postContent : get_html_output(),
         tags : tags,
+        previous_tags : global_variable.tags,
     }
     send_blog_request(upload_post_url, data, ispublish=true).then(response => {
         console.log(response);
-        window.location.href = window.location.origin + "/blog/" + data.slug;
+        window.open(window.location.origin + "/blog/" + data.slug);
+        window.location.href = window.location.origin + "/management"
         // console.log(window.location.origin + "/blog/" + data.slug);
     })
 }
 
 function draft_blog(){
     var title = $('#title_text').val();
+    var tags = [];
+    var choices = $(".select2-selection__rendered").find(".select2-selection__choice") 
+    if (choices.length > 0){
+        for (i = 0; i < choices.length; i++){
+            tags.push(choices.eq(i).attr("title"))
+        }
+    }
+
     var data = {
+        _id : global_variable._id,
         postTitle : title, 
         email : window.localStorage.getItem("email"),
         thumbnail_IMG_URL : fileUploader.title_img,
-        slug : slugify(title),
+        slug : global_variable.slug,
         postContent : get_html_output(),
+        tags : tags,
+        previous_tags : global_variable.tags,
     }
+
     send_blog_request(upload_post_url, data, ispublish=false).then(response => {
         console.log(response);
-        window.location.href = window.location.origin + "/blog/" + data.slug;
+        window.open(window.location.origin + "/blog/" + data.slug);
+        window.location.href = window.location.origin + "/management";
     })
 }
 
@@ -185,6 +201,7 @@ async function get_post_information(url, slug){
 
 get_post_information(get_post_information_url, slug).then(response => {
     console.log(response);
+    global_variable = response;
     $(".jodit_wysiwyg").html(response.postContent);
     $('#title_text').val(response.postTitle);
     $(".site-section.py-lg").prepend('<div class="container>"><img src="' + response.thumbnail_IMG_URL +'" class="img-thumbnail rounded mx-auto d-block" style="width: 50%; height: 50%;" alt="Responsive image"></div>')
@@ -201,6 +218,5 @@ get_post_information(get_post_information_url, slug).then(response => {
         tags: true,
         width: '100%',
       });
-    global_variable = response;
 })
 

@@ -58,6 +58,8 @@ class BlogDatabase:
         querry= {"_id": ObjectId(postid)}
         post = {"$set":{"postTitle":postTitle, "postDate": curtime, "email":email, "thumbnail_IMG_URL" : thumbnail_IMG_URL, "slug": slug, "postContent": postContent, "ispublished": ispublished,"isDeleted": False, "tags" : tags}}
         result = self.post_collection.update_one(querry,post)
+        for tag in tags:
+            self.update_to_tag_collection(tag, postid, slug, curtime, thumbnail_IMG_URL, postTitle, email, ispublished)
         return result
 
     def findall_post(self):
@@ -164,6 +166,20 @@ class BlogDatabase:
     def post_collection_modify_post_stage(self, slug, ispublished):
         self.post_collection.update({"slug" : slug}, {"$set" : {"ispublished" : ispublished}})
         
+
+    def update_to_tag_collection(self, tag, id, slug, curtime,thumbnail_IMG_URL, postTitle, email, ispublished):
+        object_id = ObjectId(id)
+
+        self.db[tag].update_one({"_id" : object_id},{ "$set" :  
+                    {"slug" : slug, "postDate" : curtime, 
+                    "thumbnail_IMG_URL" : thumbnail_IMG_URL, 
+                    "postTitle" : postTitle,
+                    "email" : email,
+                    "ispublished" : ispublished,
+                    "isDeleted" : False}}, upsert=True)
+
+    def delete_to_tag_collection(self, tag, id):
+        self.db[tag].remove({"_id" : ObjectId(id)})     
 
 if __name__ == '__main__':
     import time

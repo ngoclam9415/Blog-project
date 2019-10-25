@@ -7,7 +7,7 @@
   var get_latest_post_url = window.location.origin + "/get_latest_posts";
   var post_person_image = window.location.origin + '/static/blog/images/person_1.jpg';
   
-  verify()
+  // verify()
   // loader
   var loader = function() {
     setTimeout(function() { 
@@ -218,13 +218,13 @@
 	
 
 
-function verify(){
-  var hex_code = window.localStorage.getItem("hex_code");
-  if (hex_code !== "0" && hex_code !== undefined && hex_code !== null){
+// function verify(){
+//   var hex_code = window.localStorage.getItem("hex_code");
+//   if (hex_code !== "0" && hex_code !== undefined && hex_code !== null){
     
-    add_newpost_button()
-  }
-}
+//     add_newpost_button()
+//   }
+// }
 
 function add_newpost_button(){
   $('.col-9.social').append('<a href="/editor"><button type="button" id="new_post" class="btn btn-primary btn-lg">NEW POST</button></a>')
