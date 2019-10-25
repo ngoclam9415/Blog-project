@@ -292,6 +292,12 @@ def show_editor_page():
     if g.user:
         return render_template("login/html/editor_page.html")
 
+@app.route('/update_post_stage', methods=["POST"])
+def modify_post_stage():
+    data = request.get_json()
+    db.post_collection_modify_post_stage(data.get("slug"), data.get("ispublished"))
+    return jsonify({"message" : "Modify stage change successfully"})
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5000", debug=True)

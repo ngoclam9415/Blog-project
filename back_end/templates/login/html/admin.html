@@ -142,8 +142,8 @@
                                 <td>{{blog[a]["postDate"]}}</td>
                                 <td>{{blog[a]["slug"]}}</td>
                                 <td>
+                                  <select class="custom-select" id="inputGroupSelect01">
                                   {% if blog[a]["ispublished"] == True %}
-                                    <select class="custom-select" id="inputGroupSelect01">
                                       <option value="post" selected>True</option>
                                       <option value="draft">False</option>
                                   {% else %}
@@ -216,16 +216,10 @@
     </div>
     <script
       src="http://localhost:5000/static/blog/js/jquery-3.2.1.min.js"></script>
-    <script>
-        'document.getElementById("username").innerHTML = window.localStorage.getItem("username")'
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="/static/login/js/admin_page_controller.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
-    <script>
-        window.localStorage.setItem("email", '{{data["username"]}}@gmail.com');
-    </script>
     
 
   </body>

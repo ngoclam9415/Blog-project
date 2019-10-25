@@ -143,7 +143,7 @@ class BlogDatabase:
                 "last_date" : {"$last" : "$commentDate"}
             }},
             {"$sort" : {"last_date" : -1}},
-            {"$limit" : limit},
+            # {"$limit" : limit},
         ])
         # cursors = dumps(cursors)
         cursors = list(cursors)
@@ -151,7 +151,7 @@ class BlogDatabase:
         print("limit = ", limit)
         print("len of cursors : ",len(cursors))
         field_query_values = [cursor["_id"] for cursor in cursors]
-        new_cursors = self.post_collection.find({"slug" : {"$in" : field_query_values}})
+        new_cursors = self.post_collection.find({"slug" : {"$in" : field_query_values}, "ispublished": True, "isDeleted": False}).limit(limit)
         # return_post_info = []
         sort_key = {}
         for cursor in cursors:
@@ -160,6 +160,9 @@ class BlogDatabase:
         
         return list(new_cursors), cursors
         # return dumps(cursors)
+
+    def post_collection_modify_post_stage(self, slug, ispublished):
+        self.post_collection.update({"slug" : slug}, {"$set" : {"ispublished" : ispublished}})
         
 
 if __name__ == '__main__':
