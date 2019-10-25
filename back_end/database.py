@@ -53,10 +53,10 @@ class BlogDatabase:
     # def find_latest_comment_post(self, nof_post):
         # self.comment_collection.distinct("")
 
-    def update_post(self,postid, postTitle,email,thumbnail_IMG_URL,slug,postContent):
+    def update_post(self,postid, postTitle,email,thumbnail_IMG_URL,slug,postContent, ispublished, tags):
         curtime = time.time()
         querry= {"_id": ObjectId(postid)}
-        post = {"$set":{"postTitle":postTitle, "postDate": curtime, "email":email, "thumbnail_IMG_URL" : thumbnail_IMG_URL, "slug": slug, "postContent": postContent, "ispublished": True,"isDeleted": False}}
+        post = {"$set":{"postTitle":postTitle, "postDate": curtime, "email":email, "thumbnail_IMG_URL" : thumbnail_IMG_URL, "slug": slug, "postContent": postContent, "ispublished": ispublished,"isDeleted": False, "tags" : tags}}
         result = self.post_collection.update_one(querry,post)
         return result
 

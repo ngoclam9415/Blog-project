@@ -24,7 +24,14 @@ $(".btn-primary").on("click", function(){
     }
 })
 
+
+
 async function edit_post_stage(url, slug, ispublished){
+    if (ispublished === "True"){
+        ispublished = true;
+    } else {
+        ispublished = false;
+    }
     var data = {slug : slug, 
                 ispublished : ispublished};
     const reponse = await fetch(url, {

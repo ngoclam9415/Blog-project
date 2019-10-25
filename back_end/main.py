@@ -298,6 +298,26 @@ def modify_post_stage():
     db.post_collection_modify_post_stage(data.get("slug"), data.get("ispublished"))
     return jsonify({"message" : "Modify stage change successfully"})
 
+@app.route('/management/editor/<slug>')
+def show_editor_slug(slug):
+    # data = db.findpost(slug)
+    # if data is None:
+    #     return "PAGE IS NOT AVAILABLE"
+    return render_template("login/html/editor_page_slug.html")
+
+@app.route('/get_slug_information', methods=["POST"])
+def get_slug_information():
+    data = request.get_json()
+    slug_information = db.findpost(data.get("slug"))
+    slug_information["_id"] = str(slug_information["_id"])
+    return jsonify(slug_information)
+
+@app.route('/update_post', methods=["POST"])
+def update_post():
+    data = request.get_json()
+    result = db.update_post(data.get("_id"), data.get("postTitle"), data.get("email"), data.get("thumbnail_IMG_URL"), data.get("slug"), data.get("postContent"), data.get("ispublish"), data.get("tags"))
+    return jsonify({"message" : "Update post successfully"})
+    
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5000", debug=True)
