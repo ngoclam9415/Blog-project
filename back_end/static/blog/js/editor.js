@@ -129,7 +129,6 @@ function draft_blog(){
 }
 
 
-
 async function send_blog_request(url, data, ispublish){
     data.ispublish = ispublish;
     const response = await fetch(url, {
@@ -141,6 +140,9 @@ async function send_blog_request(url, data, ispublish){
     });
     return await response.json();
 }
+
+
+as
 
 function slugify(string) {
   const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;'

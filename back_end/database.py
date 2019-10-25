@@ -61,7 +61,7 @@ class BlogDatabase:
         return result
 
     def findall_post(self):
-        cursors = self.post_collection.find({"ispublished": True, "isDeleted": False})
+        cursors = self.post_collection.find({"isDeleted": False})
         return dumps(cursors)
 
     def findlimit_post(self,startTime,endTime,limit, skipped_item=1):
