@@ -11,12 +11,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" id="main-stylesheet" data-version="1.1.0" href="{{ url_for('static', filename='login/css/shards-dashboards.1.1.0.min.css')  }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='login/css/extras.1.1.0.min.css')  }}">
+    <script
+      src="http://localhost:5000/static/blog/js/jquery-3.2.1.min.js"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <link rel="stylesheet" href="http://localhost:5000/static/blog/css/jodit.min.css">
     <script src="http://localhost:5000/static/blog/js/jodit.min.js"></script>
     
     <link rel="stylesheet" href="http://localhost:5000/static/blog/css/select2.min.css">
-    
     <!-- Theme Style -->
     <!-- <link rel="stylesheet" href="http://localhost:5000/static/blog/css/style.css"> -->
   </head>
@@ -56,7 +57,7 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="new_post" href="{{ url_for('show_editor_page') }}">
+                  <a class="nav-link" id="new_post" href="">
                     <i class="material-icons">note_add</i>
                     <span>Add New Post</span>
                   </a>
@@ -98,6 +99,9 @@
 
 
           <!-- / .main-navbar -->
+            <!-- End Default Light Table -->
+            <!-- Default Dark Table -->
+            <!-- End Default Dark Table -->
           <div class="main-content-container container-fluid px-4">
             <!-- Page Header -->
             <div class="page-header row no-gutters py-4">
@@ -107,98 +111,47 @@
               </div>
             </div>
             <!-- End Page Header -->
-            <!-- Default Light Table -->
-            <div class="row">
-              <div class="col">
-                <div class="card card-small mb-4">
-                  <div class="card-header border-bottom">
-                    <h6 class="m-0">
-                      Danh sách bài viết
-                    </h6>
-                    <!-- <a type="button" href="http://localhost:5000/secret_ingredient/add-new-post/">
-                        <i class="material-icons" onclick ="window.location.href='add-new-post/'" type=submit>file_copy</i>Đăng bài</a> -->
-                  </div>
-                  <div class="card-body p-0 pb-3 text-center">
-                    <!--
-                    <table class="table mb-0">
-                    
-                    </table-->
-                    <table class="table mb-0">
-                        <thead class="bg-light">
-                            <tr>
-                              <th scope="col" class="border-5">ID</th>
-                              <th scope="col" class="border-5">Title</th>
-                              <th scope="col" class="border-5">Time post</th>
-                              <th scope="col" class="border-5">Slug</th>
-                              <th scope="col" class="border-5">Published</th>
-                              <th scope="col" class="border-5">Edit</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {%for a in range(0,ln)%}
-                              <tr>
-                                <td id="id">{{a}}</td>
-                                <td>{{blog[a]["postTitle"]}}</td>
-                                <td>{{blog[a]["postDate"]}}</td>
-                                <td>{{blog[a]["slug"]}}</td>
-                                <td>
-                                  {% if blog[a]["ispublished"] == True %}
-                                    <select class="custom-select" id="inputGroupSelect01">
-                                      <option value="post" selected>True</option>
-                                      <option value="draft">False</option>
-                                  {% else %}
-                                      <option value="post" >True</option>
-                                      <option value="draft" selected>False</option>
-                                    </select>
-                                  {% endif %}
-                                </td>
-                                <!-- <td>{{blog[a]["ispublished"]}}</td> -->
-                                <td>
-                                    <button href="#" class="btn btn-primary  active" role="button" aria-pressed="true"> 
-                                      Save </button>
-                                    <button href="#" class="btn btn-info  active" role="button" aria-pressed="true"> 
-                                        Edit </button>
-                                    <button href="#" class="btn btn-danger  active" role="button" aria-pressed="true"><i class="material-icons">X</i></button>
-                                </td>
-                              </tr>
-                              {%endfor%}
-                          </tbody>
-                    </table>
-                    <div id="pager2"></div>
-                    <!-- Paging -->
-                    <div class="row"><div class="col-sm">
-                      <span class="pagination-caption">Displaying items from 1 to 10 of total 20 items.</span>
-                    </div> 
-                    <div class="col-sm-auto ml-auto d-flex px-3">
-                      <nav>
-                        <ul class="pagination sizeClass">
-                          <li class="disabled page-item">
-                            <span class="page-link">
-                              <span aria-hidden="true">«</span>
-                            </span> 
-                            <!--   -->
-                          </li> 
-                          <li class="active page-item">
-                            <a href="#" class="page-link">1</a>
-                          </li>
-                          <li class="page-item">
-                            <a href="#" class="page-link">2</a>
-                          </li> 
-                          <li class="page-item">
-                            <!----> 
-                            <a href="#" aria-label="Next" class="page-link">
-                              <span aria-hidden="true">»</span>
-                            </a>
-                          </li>
-                        </ul>
-                      </nav>
-                    </div>
-                    <!-- End paging -->
-                  </div>
-                  </div>
-                </div>
+            <section class="site-section py-lg">
+              <div class="container">
+                <br>
+                <select class="form-control select_stuff" multiple="multiple" >
+                    <option>AI/ML</option>
+                    <option>Front-end</option>
+                    <option>Back-end</option>
+                    <option>System</option>
+                    <option>Data</option>
+                </select>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
+                <script>
+                $(".select_stuff").select2({
+                  placeholder : "Pick your tags",
+                  tags: true,
+                  width: '100%',
+                });
+                </script>
               </div>
-            </div>
+              <div class="container">
+                      <div class="form-group">
+                          <label for="exampleFormControlFile1">Cover Image</label>
+                          <input type="file" class="form-control-file" id="title_file">
+                      </div>
+              </div>
+              <div class="container">
+                  <input class="form-control form-control-lg" id="title_text" type="text" placeholder="Input Title">
+                  <br>
+              </div>
+              <div class="container">
+                <textarea id="editor" name="editor"></textarea>
+                <script src="http://localhost:5000/static/blog/js/editor.js"></script>
+                <br>
+              </div>
+              <div class="container">
+                <button type="button" id="post-btn" class="btn btn-primary">Post</button>
+                <button type="button" id="draft-btn" class="btn btn-secondary">Draft</button>
+                <button type="button" id="preview-btn" class="btn btn-success">Preview</button>
+              </div>
+              <br>
+            </section>
             <!-- End Default Light Table -->
             <!-- Default Dark Table -->
             <!-- End Default Dark Table -->
@@ -214,18 +167,12 @@
         </main>
       </div>
     </div>
-    <script
-      src="http://localhost:5000/static/blog/js/jquery-3.2.1.min.js"></script>
-    <script>
-        'document.getElementById("username").innerHTML = window.localStorage.getItem("username")'
-    </script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="/static/login/js/admin_page_controller.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
-    <script>
-        window.localStorage.setItem("email", '{{data["username"]}}@gmail.com');
-    </script>
+    
     
 
   </body>

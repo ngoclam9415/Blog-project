@@ -287,5 +287,11 @@ def clear_session():
     session["user"] = None
     return redirect('/secret_ingredient')
 
+@app.route('/management/editor')
+def show_editor_page():
+    if g.user:
+        return render_template("login/html/editor_page.html")
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="5000", debug=True)
