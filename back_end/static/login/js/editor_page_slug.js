@@ -1,6 +1,14 @@
+var url_list = window.location.href.split('/');
+var slug = url_list[url_list.length - 1];
+var get_post_information_url = window.location.origin + '/get_slug_information'
 var upload_file = [];
 var upload_images_url = window.location.origin +  "/save_images";
-var upload_post_url = window.location.origin + "/uploadpost";
+var upload_post_url = window.location.origin + "/update_post";
+var delete_comment_url = window.location.origin + "/delete_comment";
+
+var list_of_tags = ["AI/ML", "Front-end", "Back-end", "System", "Data"]
+var global_variable = undefined;
+
 
 class FileUploader{
     constructor(){
@@ -72,7 +80,16 @@ $(document).ready(function(){
         alert('The file "' + fileName.name +  '" has been selected.');
     });
     $("#post-btn").on("click", post_blog);
-    $("#draft-btn").on("click", draft_blog)
+    $("#draft-btn").on("click", draft_blog);
+    $("#comment_table").find(".btn-danger").on("click", function(){
+        var comment_id = $(this).closest("tr").find("th").text();
+        var data = {"_id" : comment_id};
+        $(this).closest("tr").remove();
+        delete_comment_info(delete_comment_url, data).then(response => {
+            console.log(response)
+        })
+    })
+    
 });
 // add_input_file_button()
 
@@ -100,16 +117,17 @@ function post_blog(){
         }
     }
     var data = {
+        _id : global_variable._id,
         postTitle : title, 
         email : window.localStorage.getItem("email"),
         thumbnail_IMG_URL : fileUploader.title_img,
-        slug : slugify(title),
+        slug : global_variable.slug,
         postContent : get_html_output(),
         tags : tags,
+        previous_tags : global_variable.tags,
     }
     send_blog_request(upload_post_url, data, ispublish=true).then(response => {
         console.log(response);
-        // window.location.href = window.location.origin + "/blog/" + data.slug;
         window.open(window.location.origin + "/blog/" + data.slug);
         window.location.href = window.location.origin + "/management"
         // console.log(window.location.origin + "/blog/" + data.slug);
@@ -118,18 +136,29 @@ function post_blog(){
 
 function draft_blog(){
     var title = $('#title_text').val();
+    var tags = [];
+    var choices = $(".select2-selection__rendered").find(".select2-selection__choice") 
+    if (choices.length > 0){
+        for (i = 0; i < choices.length; i++){
+            tags.push(choices.eq(i).attr("title"))
+        }
+    }
+
     var data = {
+        _id : global_variable._id,
         postTitle : title, 
         email : window.localStorage.getItem("email"),
         thumbnail_IMG_URL : fileUploader.title_img,
-        slug : slugify(title),
+        slug : global_variable.slug,
         postContent : get_html_output(),
+        tags : tags,
+        previous_tags : global_variable.tags,
     }
+
     send_blog_request(upload_post_url, data, ispublish=false).then(response => {
         console.log(response);
-        // window.location.href = window.location.origin + "/blog/" + data.slug;
         window.open(window.location.origin + "/blog/" + data.slug);
-        window.location.href = window.location.origin + "/management"
+        window.location.href = window.location.origin + "/management";
     })
 }
 
@@ -147,7 +176,7 @@ async function send_blog_request(url, data, ispublish){
 }
 
 
-as
+
 
 function slugify(string) {
   const a = 'àáâäæãåāăąçćčđďèéêëēėęěğǵḧîïíīįìłḿñńǹňôöòóœøōõṕŕřßśšşșťțûüùúūǘůűųẃẍÿýžźż·/_,:;'
@@ -167,3 +196,49 @@ function slugify(string) {
 
 
 
+
+async function get_post_information(url, slug){
+    var data = {slug : slug};
+    const response = await fetch(url, {
+        method : "POST",
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(data)
+    });
+    return await response.json();
+}
+
+get_post_information(get_post_information_url, slug).then(response => {
+    console.log(response);
+    global_variable = response;
+    $(".jodit_wysiwyg").html(response.postContent);
+    $('#title_text').val(response.postTitle);
+    $(".site-section.py-lg").prepend('<div class="container>"><img src="' + response.thumbnail_IMG_URL +'" class="img-thumbnail rounded mx-auto d-block" style="width: 50%; height: 50%;" alt="Responsive image"></div>')
+    fileUploader.title_img = response.thumbnail_IMG_URL;
+    for( var tag of list_of_tags ){
+        if (response.tags.includes(tag)){
+            $(".select_stuff").append("<option selected>"+ tag +"</option>");
+        } else {
+            $(".select_stuff").append("<option>"+ tag +"</option>");
+        }
+    }
+    $(".select_stuff").select2({
+        placeholder : "Pick your tags",
+        tags: true,
+        width: '100%',
+      });
+})
+
+
+
+async function delete_comment_info(url, data){
+    const response = await fetch(url, {
+        method : "POST",
+        headers : {
+            'Content-Type' : 'application/json'
+        },
+        body : JSON.stringify(data)
+    });
+    return await response.json();
+}

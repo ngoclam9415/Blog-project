@@ -1,5 +1,5 @@
 from __future__ import print_function
-from flask import request,render_template, Flask, send_from_directory, jsonify, Response, redirect
+from flask import request,render_template, Flask, send_from_directory, jsonify, Response, redirect, session, g
 import os
 import time
 from utils.random_generator import generate_random_hexcode
@@ -15,6 +15,7 @@ STATIC_FOLDER = os.path.join(BASE_DIR, 'back_end', 'static')
 hex_code = generate_random_hexcode()
 # app = Flask(__name__, static_folder=STATIC_FOLDER, static_url_path='')
 app = Flask(__name__)
+app.secret_key = hex_code
 db = BlogDatabase()
 BSC = BucketStorageClient()
 # BSC = LocalStorageClient(STATIC_FOLDER)
@@ -76,19 +77,29 @@ def index():
 @app.route('/secret_ingredient')
 def login_page():
     return render_template('login/html/index.html')
+    # return render_template('login/html/thuong_index.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    session.pop('user', None)
     if request.method == 'GET':
-        return redirect('/', code=302)
+        return redirect('/secret_ingredient', code=302)
     elif request.method == 'POST':
-        data = request.get_json()
+        data = request.form
         print(data)
         if data["email"] == "lamnn@athena.studio" and data["pass"] == "1":
-            return jsonify({"hex_code" : hex_code, "message" : "Hello superuser"})
+            session["user"] = data["email"]
+            return redirect("/management")
         else:
-            return jsonify({"hex_code" : "0", "message" : "Hello"})
+            return redirect('/secret_ingredient', code=302)
         
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user' in session:
+        g.user = session['user']
+
 @app.route('/uploadpost', methods=["POST"]) #{postTitle,email,thumbnail_IMG_URL,slug,postContent,ispublish}
 def uploadpost():
     data= request.get_json()
@@ -158,7 +169,10 @@ def get_some_posts():
 
 @app.route('/editor')
 def show_editor():
-    return render_template("blog/editor.html")
+    if g.user:
+        return render_template("blog/editor.html")
+    return "YOU ARE NOT ALLOWED TO ACCESS THIS SITE"
+
 
 @app.route('/uploadcomment', methods=["POST"]) #{slug,commenterName,commenterEmail,CommentText}
 def uploadcomment():
@@ -255,6 +269,74 @@ def caculate_page_number(total_posts, request_page, nof_post_per_page, nof_displ
             if index > 0 :
                 page_indexes.append(index)
     return page_indexes, page_indexes.index(request_page)
+
+
+@app.route('/management')
+def show_management_page():
+    if not g.user:
+        return redirect('/secret_ingredient')
+    data = g.user
+    blogs = json.loads(db.findall_post())
+    # i = blogs.count() 
+    length = len(blogs)
+    return render_template('login/html/admin.html', data=data, blog=blogs, ln=length)
+
+@app.route('/clear_session')
+def clear_session():
+    g.user = None
+    session["user"] = None
+    return redirect('/secret_ingredient')
+
+@app.route('/management/editor')
+def show_editor_page():
+    if g.user:
+        return render_template("login/html/editor_page.html")
+    else:
+        return redirect("/secret_ingredient")
+
+@app.route('/update_post_stage', methods=["POST"])
+def modify_post_stage():
+    data = request.get_json()
+    db.post_collection_modify_post_stage(data.get("slug"), data.get("ispublished"))
+    return jsonify({"message" : "Modify stage change successfully"})
+
+@app.route('/management/editor/<slug>')
+def show_editor_slug(slug):
+    # data = db.findpost(slug)
+    # if data is None:
+    #     return "PAGE IS NOT AVAILABLE"
+    comments = db.query_commentId_as_string(slug)
+    return render_template("login/html/editor_page_slug.html", comments = comments)
+
+@app.route('/get_slug_information', methods=["POST"])
+def get_slug_information():
+    data = request.get_json()
+    slug_information = db.findpost(data.get("slug"))
+    slug_information["_id"] = str(slug_information["_id"])
+    return jsonify(slug_information)
+
+@app.route('/update_post', methods=["POST"])
+def update_post():
+    data = request.get_json()
+    print(data)
+    not_available_tags = [tag for tag in data.get("previous_tags") if tag not in data.get("tags")]
+    for tag in not_available_tags:
+        db.delete_to_tag_collection(tag, data.get("_id"))
+    results = db.update_post(data.get("_id"), data.get("postTitle"), data.get("email"), data.get("thumbnail_IMG_URL"), data.get("slug"), data.get("postContent"), data.get("ispublish"), data.get("tags"))
+    return jsonify({"message" : "Update post successfully"})
+    
+@app.route("/delete_post",methods =["POST"])
+def delete_post():
+   data = request.get_json()
+   db.delete_post_by_slug(data.get("slug"))
+   return jsonify({"message" : "Delete post successfully"})
+
+@app.route("/delete_comment", methods=["POST"])
+def delete_comment():
+    data = request.get_json()
+    db.delete_comment(data.get('_id'))
+    return jsonify({"message" : "Delete comment successfully"})
+
 
 
 if __name__ == '__main__':

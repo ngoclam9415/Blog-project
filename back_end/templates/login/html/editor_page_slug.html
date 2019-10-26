@@ -1,0 +1,203 @@
+<!doctype html>
+<html class="no-js h-100" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Home page</title>
+    <meta name="description" content="A high-quality &amp; free Bootstrap admin dashboard template pack that comes with lots of templates and components.">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" id="main-stylesheet" data-version="1.1.0" href="{{ url_for('static', filename='login/css/shards-dashboards.1.1.0.min.css')  }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login/css/extras.1.1.0.min.css')  }}">
+    <script
+      src="https://fresherseason2-teamtwo.appspot.com/static/blog/js/jquery-3.2.1.min.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <link rel="stylesheet" href="https://fresherseason2-teamtwo.appspot.com/static/blog/css/jodit.min.css">
+    <script src="https://fresherseason2-teamtwo.appspot.com/static/blog/js/jodit.min.js"></script>
+    
+    <link rel="stylesheet" href="https://fresherseason2-teamtwo.appspot.com/static/blog/css/select2.min.css">
+    <!-- Theme Style -->
+    <!-- <link rel="stylesheet" href="https://fresherseason2-teamtwo.appspot.com/static/blog/css/style.css"> -->
+  </head>
+  <body class="h-100">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Main Sidebar -->
+        <aside class="main-sidebar col-12 col-md-3 col-lg-2 px-0">
+            <div class="main-navbar">
+              <nav class="navbar align-items-stretch navbar-light bg-white flex-md-nowrap border-bottom p-0">
+                <a class="navbar-brand w-100 mr-0" href="#" style="line-height: 25px;">
+                  <div class="d-table m-auto">
+                    <!--img id="main-logo" class="d-inline-block align-top mr-1" style="max-width: 25px;" src="/images/shards-dashboards-logo.svg" alt="Shards Dashboard"-->
+                    <span class="d-none d-md-inline ml-1">Dashboard</span>
+                  </div>
+                </a>
+                <a class="toggle-sidebar d-sm-inline d-md-none d-lg-none">
+                  <i class="material-icons">&#xE5C4;</i>
+                </a>
+              </nav>
+            </div>
+            <form action="#" class="main-sidebar__search w-100 border-right d-sm-flex d-md-none d-lg-none">
+              <div class="input-group input-group-seamless ml-3">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">
+                    <i class="fas fa-search"></i>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div class="nav-wrapper">
+              <ul class="nav flex-column">
+                <li class="nav-item">
+                  <a class="nav-link " href="https://fresherseason2-teamtwo.appspot.com/management">
+                    <i class="material-icons">edit</i>
+                    <span>Blog post</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" id="new_post" href="">
+                    <i class="material-icons">note_add</i>
+                    <span>Add New Post</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+        </aside>
+        <!-- End Main Sidebar -->
+        <main class="main-content col-lg-10 col-md-9 col-sm-12 p-0 offset-lg-2 offset-md-3">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="https://athena.studio">
+                  <img src="http://athena.studio/countdown-athena_files/Athena_Logo-03-Vertical.png" width="45" height="30" alt="">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+              
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Hello Admin
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <!-- <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a> -->
+                        <!-- <div class="dropdown-divider"></div> -->
+                        <a class="dropdown-item" href="https://fresherseason2-teamtwo.appspot.com/clear_session">Log out</a>
+                      </div>
+                    </li>
+                  </ul>
+                  <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                  </form>
+                </div>
+              </nav>
+
+
+
+          <!-- / .main-navbar -->
+            <!-- End Default Light Table -->
+            <!-- Default Dark Table -->
+            <!-- End Default Dark Table -->
+          <div class="main-content-container container-fluid px-4">
+            <!-- Page Header -->
+            <div class="page-header row no-gutters py-4">
+              <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
+                <span class="text-uppercase page-subtitle">Overview</span>
+                <h3 class="page-title">Blog</h3>
+              </div>
+            </div>
+            <!-- End Page Header -->
+            <section class="site-section py-lg">
+              <div class="container">
+                <br>
+                <select class="form-control select_stuff" multiple="multiple" >
+                    <!-- <option>AI/ML</option>
+                    <option>Front-end</option>
+                    <option>Back-end</option>
+                    <option>System</option>
+                    <option>Data</option> -->
+                </select>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
+                <!-- <script>
+                $(".select_stuff").select2({
+                  placeholder : "Pick your tags",
+                  tags: true,
+                  width: '100%',
+                });
+                </script> -->
+              </div>
+              <div class="container">
+                      <div class="form-group">
+                          <label for="exampleFormControlFile1">Cover Image</label>
+                          <input type="file" class="form-control-file" id="title_file">
+                      </div>
+              </div>
+              <div class="container">
+                  <input class="form-control form-control-lg" id="title_text" type="text" placeholder="Input Title">
+                  <br>
+              </div>
+              <div class="container">
+                <textarea id="editor" name="editor"></textarea>
+                <script src="https://fresherseason2-teamtwo.appspot.com/static/login/js/editor_page_slug.js"></script>
+                <br>
+              </div>
+              <div class="container">
+                <button type="button" id="post-btn" class="btn btn-primary">Post</button>
+                <button type="button" id="draft-btn" class="btn btn-secondary">Draft</button>
+                <button type="button" id="preview-btn" class="btn btn-success">Preview</button>
+              </div>
+              <br>
+            </section>
+            <!-- End Default Light Table -->
+            <!-- Default Dark Table -->
+            <!-- End Default Dark Table -->
+          </div>
+          <div class="main-content-container container-fluid px-4">
+              <table class="table" >
+                  <thead>
+                    <tr>
+                      <th scope="col">id</th>
+                      <th scope="col">Commentor</th>
+                      <th scope="col">Time</th>
+                      <th scope="col">Text</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="comment_table">
+                    {% for comment in comments %}
+                      <tr>
+                        <th scope="row">{{ comment["_id"] }}</th>
+                        <td>{{ comment["commenterName"] }}</td>
+                        <td>{{ comment["commentDate"] }}</td>
+                        <td>{{ comment["CommentText"] }}</td>
+                        <td><button href="#" class="btn btn-danger  active" role="button" aria-pressed="true"><i class="material-icons">X</i></button></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+          </div>
+          <footer class="main-footer d-flex p-2 px-3 bg-white border-top">
+            <ul class="nav">
+              
+            </ul>
+            <span class="copyright ml-auto my-auto mr-2">Copyright © 2019
+              <a href="#" rel="nofollow">ABC</a>
+            </span>
+          </footer>
+        </main>
+      </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!-- <script src="/static/login/js/editor_page_slug.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
+    
+    
+
+  </body>
+</html>

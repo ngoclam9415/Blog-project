@@ -34,12 +34,12 @@
         }
 
         // this async function need .then to succesfully return value
-        send_post_request("http://localhost:5000/login", data).then(response => {
-            window.localStorage.setItem("hex_code", response.hex_code)
-            window.localStorage.setItem("email", email)
-            // Dont use JSON.stringify because it convert JSON object to string
+        // send_post_request("http://localhost:5000/login", data).then(response => {
+        // window.localStorage.setItem("hex_code", response.hex_code)
+        window.localStorage.setItem("email", email)
+        //     // Dont use JSON.stringify because it convert JSON object to string
             
-        })
+        // })
         this.submit()
         return check;
     });
