@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Colorlib Wordify &mdash; Minimal Blog Template</title>
+    <title>Athena &mdash; Sharing your knowledge</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -80,11 +80,11 @@
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="category.html" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Categories</a>
                   <div class="dropdown-menu" aria-labelledby="dropdown05">
-                    <a class="dropdown-item" href="category.html">Lifestyle</a>
-                    <a class="dropdown-item" href="category.html">Food</a>
-                    <a class="dropdown-item" href="category.html">Adventure</a>
-                    <a class="dropdown-item" href="category.html">Travel</a>
-                    <a class="dropdown-item" href="category.html">Business</a>
+                    <a class="dropdown-item" href="https://fresherseason2-teamtwo.appspot.com/category/ai-ml">AI/ML</a>
+                    <a class="dropdown-item" href="https://fresherseason2-teamtwo.appspot.com/category/front-end">Front-end</a>
+                    <a class="dropdown-item" href="https://fresherseason2-teamtwo.appspot.com/category/back-end">Back-end</a>
+                    <a class="dropdown-item" href="https://fresherseason2-teamtwo.appspot.com/category/system">System</a>
+                    <a class="dropdown-item" href="https://fresherseason2-teamtwo.appspot.com/category/data">Data</a>
                   </div>
 
                 </li>
@@ -102,7 +102,7 @@
       </header>
       <!-- END header -->
 
-    <section class="site-section py-lg">
+    <section class="site-section py-lg py-md">
       <div class="container">
         
         <div class="row blog-entries element-animate">
@@ -111,12 +111,13 @@
             <img src={{ cover_image }} alt="https://fresherseason2-teamtwo.appspot.com/static/blog/images/img_10.jpg" class="img-fluid mb-5">
              <div class="post-meta">
                         <span class="author mr-2"><img src="https://fresherseason2-teamtwo.appspot.com/static/blog/images/person_1.jpg" alt="Colorlib" class="mr-2"> Colorlib</span>&bullet;
-                        <span class="mr-2">March 15, 2018 </span> &bullet;
+                        <span class="mr-2">{{postDate}} </span> &bullet;
                         <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
                       </div>
             <h1 class="mb-4">{{ text_title }}</h1>
-            <a class="category mb-5" href="#">Food</a> <a class="category mb-5" href="#">Travel</a>
-           
+            {% for tag in tags %}
+              <a class="category mb-5" href="#">{{ tag }}</a>
+            {% endfor %}
             <div class="post-content-body">
               {{content|safe}}
             </div>
@@ -207,41 +208,23 @@
             <!-- END sidebar-box -->  
             <div class="sidebar-box">
               <h3 class="heading">Popular Posts</h3>
-              <div class="post-entry-sidebar">
+              <div class="post-entry-sidebar" id="popular_post">
                 <ul>
-                  <li>
-                    <a href="">
-                      <img src="https://fresherseason2-teamtwo.appspot.com/static/blog/images/img_1.jpg" alt="Image placeholder" class="mr-4">
-                      <div class="text">
-                        <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                        <div class="post-meta">
-                          <span class="mr-2">March 15, 2018 </span>
+                    {% for i in range(nof_info) %}
+                    <li>
+                      <a href="https://fresherseason2-teamtwo.appspot.com/blog/{{ recent_post_info[i]['slug'] }}" style="margin : 0px;">
+                        <img src="{{recent_post_info[i]['thumbnail_IMG_URL']}}" alt="Image placeholder" class="mr-4">
+                        <div class="text">
+                          <h4>{{ recent_post_info[i]["postTitle"] }}</h4>
+                          <!-- <h4>{{ recent_comment_info[i]['text'] }}</h4> -->
                         </div>
+                      </a>
+                      <div class="post-meta">
+                        <span class="mr-2">{{ recent_comment_info[i]['name'] }} recently comment on {{ recent_comment_info[i]['last_date'] }} : </span>
+                        <span class="mr-4">{{ recent_comment_info[i]['text'] }}</span>
                       </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="">
-                      <img src="https://fresherseason2-teamtwo.appspot.com/static/blog/images/img_1.jpg" alt="Image placeholder" class="mr-4">
-                      <div class="text">
-                        <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                        <div class="post-meta">
-                          <span class="mr-2">March 15, 2018 </span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="">
-                      <img src="https://fresherseason2-teamtwo.appspot.com/static/blog/images/img_1.jpg" alt="Image placeholder" class="mr-4">
-                      <div class="text">
-                        <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
-                        <div class="post-meta">
-                          <span class="mr-2">March 15, 2018 </span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
+                    </li>
+                  {% endfor %}
                 </ul>
               </div>
             </div>
@@ -250,16 +233,14 @@
             <div class="sidebar-box">
               <h3 class="heading">Categories</h3>
               <ul class="categories">
-                <li><a href="#">Food <span>(12)</span></a></li>
-                <li><a href="#">Travel <span>(22)</span></a></li>
-                <li><a href="#">Lifestyle <span>(37)</span></a></li>
-                <li><a href="#">Business <span>(42)</span></a></li>
-                <li><a href="#">Adventure <span>(14)</span></a></li>
+                  {% for key, value in category_post_number %}
+                    <li><a href="https://fresherseason2-teamtwo.appspot.com/category/{{ key }}">{{value[0]}} <span>({{ value[1] }})</span></a></li>
+                  {% endfor %}
               </ul>
             </div>
             <!-- END sidebar-box -->
 
-            <div class="sidebar-box">
+            <!-- <div class="sidebar-box">
               <h3 class="heading">Tags</h3>
               <ul class="tags">
                 <li><a href="#">Travel</a></li>
@@ -275,7 +256,7 @@
                 <li><a href="#">Business</a></li>
                 <li><a href="#">Freelancing</a></li>
               </ul>
-            </div>
+            </div> -->
           </div>
           <!-- END sidebar -->
 
@@ -351,42 +332,20 @@
                   <h3>Latest Post</h3>
                   <div class="post-entry-sidebar">
                     <ul>
-                      <li>
-                        <a href="">
-                          <img src="https://fresherseason2-teamtwo.appspot.com/static/blog/images/img_6.jpg" alt="Image placeholder" class="mr-4">
-                          <div class="text">
-                            <h4>How to Find the Video Games of Your Youth</h4>
-                            <div class="post-meta">
-                              <span class="mr-2">March 15, 2018 </span> &bullet;
-                              <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
+                      {% for latest_post in latest_posts %}
+                        <li>
+                          <a href="https://fresherseason2-teamtwo.appspot.com/blog/{{latest_post['slug']}}">
+                            <img src="{{ latest_post['thumbnail_IMG_URL'] }}" alt="Image placeholder" class="mr-4">
+                            <div class="text">
+                              <h4>{{ latest_post['postTitle'] }}</h4>
+                              <div class="post-meta">
+                                <span class="mr-2"> {{ latest_post["postDate"] }} </span> &bullet;
+                                <!-- <span class="ml-2"><span class="fa fa-comments"></span> 3</span> -->
+                              </div>
                             </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="">
-                          <img src="https://fresherseason2-teamtwo.appspot.com/static/blog/images/img_3.jpg" alt="Image placeholder" class="mr-4">
-                          <div class="text">
-                            <h4>How to Find the Video Games of Your Youth</h4>
-                            <div class="post-meta">
-                              <span class="mr-2">March 15, 2018 </span> &bullet;
-                              <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="">
-                          <img src="https://fresherseason2-teamtwo.appspot.com/static/blog/images/img_4.jpg" alt="Image placeholder" class="mr-4">
-                          <div class="text">
-                            <h4>How to Find the Video Games of Your Youth</h4>
-                            <div class="post-meta">
-                              <span class="mr-2">March 15, 2018 </span> &bullet;
-                              <span class="ml-2"><span class="fa fa-comments"></span> 3</span>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
+                          </a>
+                        </li>
+                      {% endfor %}
                     </ul>
                   </div>
                 </div>
