@@ -49,7 +49,7 @@ sqlparse==0.3.0
 typogrify==2.0.7
 Unidecode==1.1.1
 urllib3==1.25.6
-wagtail==2.6.2
+wagtail==2.7.4
 webencodings==0.5.1
 Werkzeug==0.16.0
 Willow==1.1
