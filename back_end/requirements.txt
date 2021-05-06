@@ -13,7 +13,7 @@ djangorestframework==3.10.3
 dnspython==1.16.0
 draftjs-exporter==2.1.7
 Flask==1.1.1
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 fswrap==1.0.0
 google-api-core==1.14.3
 google-auth==1.6.3
