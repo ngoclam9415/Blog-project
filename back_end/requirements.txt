@@ -12,7 +12,7 @@ django-treebeard==4.3
 djangorestframework==3.10.3
 dnspython==1.16.0
 draftjs-exporter==2.1.7
-Flask==2.2.5
+Flask-Cors==3.0.9
 Flask-Cors==3.0.8
 fswrap==1.0.0
 google-api-core==1.14.3
