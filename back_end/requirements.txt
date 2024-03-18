@@ -5,7 +5,7 @@ certifi==2023.7.22
 chardet==3.0.4
 Click==7.0
 commando==1.0.0
-Django==3.2.24
+Django==3.2.25
 django-modelcluster==4.4
 django-taggit==0.24.0
 django-treebeard==4.3
